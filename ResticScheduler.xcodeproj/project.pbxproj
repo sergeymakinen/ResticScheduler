@@ -1,0 +1,863 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4B5531D22985CA0A003C9B5B /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5531D12985CA0A003C9B5B /* Utilities.swift */; };
+		4B5531D82986E2B7003C9B5B /* AdvancedSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5531D72986E2B7003C9B5B /* AdvancedSettingsView.swift */; };
+		4B5531DA2986E2CA003C9B5B /* AdvancedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5531D92986E2CA003C9B5B /* AdvancedSettings.swift */; };
+		4BDF2AFB2988622E00B413CA /* ResticScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDF2AFA2988622E00B413CA /* ResticScheduler.swift */; };
+		4BDF2AFD2988653100B413CA /* ResticScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDF2AFC2988653100B413CA /* ResticScheduler.swift */; };
+		4BDF2AFF29891B0900B413CA /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDF2AFE29891B0900B413CA /* Utilities.swift */; };
+		4BFF005F29829EB700E22558 /* ResticSchedulerKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BFF005E29829EB700E22558 /* ResticSchedulerKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4BFF006229829EB700E22558 /* ResticSchedulerKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BFF005C29829EB700E22558 /* ResticSchedulerKit.framework */; };
+		4BFF006329829EB700E22558 /* ResticSchedulerKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4BFF005C29829EB700E22558 /* ResticSchedulerKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4BFF006829829EF000E22558 /* ResticRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF006729829EF000E22558 /* ResticRunner.swift */; };
+		4BFF006929829FB400E22558 /* ResticSchedulerKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BFF005C29829EB700E22558 /* ResticSchedulerKit.framework */; };
+		4BFF006A29829FB400E22558 /* ResticSchedulerKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4BFF005C29829EB700E22558 /* ResticSchedulerKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4BFF007129840B9D00E22558 /* restic in Resources */ = {isa = PBXBuildFile; fileRef = 4BFF006F29840B3900E22558 /* restic */; };
+		4BFF99752981868700A5FA6B /* ResticSchedulerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99742981868700A5FA6B /* ResticSchedulerApp.swift */; };
+		4BFF99792981868800A5FA6B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4BFF99782981868800A5FA6B /* Assets.xcassets */; };
+		4BFF997C2981868800A5FA6B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4BFF997B2981868800A5FA6B /* Preview Assets.xcassets */; };
+		4BFF99A02981873100A5FA6B /* ResticRunnerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF999F2981873100A5FA6B /* ResticRunnerService.swift */; };
+		4BFF99A22981873100A5FA6B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99A12981873100A5FA6B /* main.swift */; };
+		4BFF99A62981873100A5FA6B /* Restic Runner.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 4BFF999B2981873100A5FA6B /* Restic Runner.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4BFF99CF2981BE3C00A5FA6B /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99C42981BE3C00A5FA6B /* GeneralSettingsView.swift */; };
+		4BFF99D12981BE3C00A5FA6B /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99C62981BE3C00A5FA6B /* AppEnvironment.swift */; };
+		4BFF99D22981BE3C00A5FA6B /* EditableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99C72981BE3C00A5FA6B /* EditableList.swift */; };
+		4BFF99D32981BE3C00A5FA6B /* ResticSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99C82981BE3C00A5FA6B /* ResticSettingsView.swift */; };
+		4BFF99D42981BE3C00A5FA6B /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99C92981BE3C00A5FA6B /* Utilities.swift */; };
+		4BFF99D52981BE3C00A5FA6B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99CA2981BE3C00A5FA6B /* AppDelegate.swift */; };
+		4BFF99D62981BE3C00A5FA6B /* ResticSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99CB2981BE3C00A5FA6B /* ResticSettings.swift */; };
+		4BFF99D72981BE3C00A5FA6B /* EditableListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99CC2981BE3C00A5FA6B /* EditableListView.swift */; };
+		4BFF99D82981BE3C00A5FA6B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99CD2981BE3C00A5FA6B /* SettingsView.swift */; };
+		4BFF99D92981BE3C00A5FA6B /* GeneralSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99CE2981BE3C00A5FA6B /* GeneralSettings.swift */; };
+		4BFF99DB2981C18C00A5FA6B /* ResticRunnerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99DA2981C18C00A5FA6B /* ResticRunnerService.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4BFF006029829EB700E22558 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4BFF99692981868700A5FA6B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4BFF005B29829EB700E22558;
+			remoteInfo = ResticSchedulerKit;
+		};
+		4BFF006B29829FB400E22558 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4BFF99692981868700A5FA6B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4BFF005B29829EB700E22558;
+			remoteInfo = ResticSchedulerKit;
+		};
+		4BFF99A42981873100A5FA6B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4BFF99692981868700A5FA6B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4BFF999A2981873100A5FA6B;
+			remoteInfo = ResticRunner;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4BFF9996298186F000A5FA6B /* Embed XPC Services */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
+			dstSubfolderSpec = 16;
+			files = (
+				4BFF99A62981873100A5FA6B /* Restic Runner.xpc in Embed XPC Services */,
+			);
+			name = "Embed XPC Services";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BFF99BA2981886800A5FA6B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4BFF006329829EB700E22558 /* ResticSchedulerKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BFF99DE2981DC2100A5FA6B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4BFF006A29829FB400E22558 /* ResticSchedulerKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4B5531D12985CA0A003C9B5B /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		4B5531D72986E2B7003C9B5B /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
+		4B5531D92986E2CA003C9B5B /* AdvancedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettings.swift; sourceTree = "<group>"; };
+		4BCFA52A2A504AE000132BF6 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = SOURCE_ROOT; };
+		4BCFA52C2A505EFC00132BF6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4BCFA52D2A50854B00132BF6 /* ResticRunner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ResticRunner.entitlements; sourceTree = "<group>"; };
+		4BDF2AFA2988622E00B413CA /* ResticScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResticScheduler.swift; sourceTree = "<group>"; };
+		4BDF2AFC2988653100B413CA /* ResticScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResticScheduler.swift; sourceTree = "<group>"; };
+		4BDF2AFE29891B0900B413CA /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		4BFF005C29829EB700E22558 /* ResticSchedulerKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ResticSchedulerKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BFF005E29829EB700E22558 /* ResticSchedulerKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResticSchedulerKit.h; sourceTree = "<group>"; };
+		4BFF006729829EF000E22558 /* ResticRunner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResticRunner.swift; sourceTree = "<group>"; };
+		4BFF006F29840B3900E22558 /* restic */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = restic; path = "$(APP_RESTIC_BINARY)"; sourceTree = "<group>"; };
+		4BFF99712981868700A5FA6B /* Restic Scheduler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Restic Scheduler.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BFF99742981868700A5FA6B /* ResticSchedulerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResticSchedulerApp.swift; sourceTree = "<group>"; };
+		4BFF99782981868800A5FA6B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4BFF997B2981868800A5FA6B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		4BFF997D2981868800A5FA6B /* ResticScheduler.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ResticScheduler.entitlements; sourceTree = "<group>"; };
+		4BFF999B2981873100A5FA6B /* Restic Runner.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = "Restic Runner.xpc"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BFF999F2981873100A5FA6B /* ResticRunnerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResticRunnerService.swift; sourceTree = "<group>"; };
+		4BFF99A12981873100A5FA6B /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		4BFF99A32981873100A5FA6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4BFF99C42981BE3C00A5FA6B /* GeneralSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		4BFF99C62981BE3C00A5FA6B /* AppEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		4BFF99C72981BE3C00A5FA6B /* EditableList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableList.swift; sourceTree = "<group>"; };
+		4BFF99C82981BE3C00A5FA6B /* ResticSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResticSettingsView.swift; sourceTree = "<group>"; };
+		4BFF99C92981BE3C00A5FA6B /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		4BFF99CA2981BE3C00A5FA6B /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		4BFF99CB2981BE3C00A5FA6B /* ResticSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResticSettings.swift; sourceTree = "<group>"; };
+		4BFF99CC2981BE3C00A5FA6B /* EditableListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableListView.swift; sourceTree = "<group>"; };
+		4BFF99CD2981BE3C00A5FA6B /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		4BFF99CE2981BE3C00A5FA6B /* GeneralSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralSettings.swift; sourceTree = "<group>"; };
+		4BFF99DA2981C18C00A5FA6B /* ResticRunnerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResticRunnerService.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4BFF005929829EB700E22558 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BFF996E2981868700A5FA6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BFF006229829EB700E22558 /* ResticSchedulerKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BFF99982981873100A5FA6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BFF006929829FB400E22558 /* ResticSchedulerKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4BFF005D29829EB700E22558 /* ResticSchedulerKit */ = {
+			isa = PBXGroup;
+			children = (
+				4BFF006729829EF000E22558 /* ResticRunner.swift */,
+				4BDF2AFA2988622E00B413CA /* ResticScheduler.swift */,
+				4BFF005E29829EB700E22558 /* ResticSchedulerKit.h */,
+				4BDF2AFE29891B0900B413CA /* Utilities.swift */,
+			);
+			path = ResticSchedulerKit;
+			sourceTree = "<group>";
+		};
+		4BFF99682981868700A5FA6B = {
+			isa = PBXGroup;
+			children = (
+				4BFF006F29840B3900E22558 /* restic */,
+				4BCFA52A2A504AE000132BF6 /* Config.xcconfig */,
+				4BFF005D29829EB700E22558 /* ResticSchedulerKit */,
+				4BFF99BB2981888700A5FA6B /* Frameworks */,
+				4BFF99722981868700A5FA6B /* Products */,
+				4BFF999C2981873100A5FA6B /* ResticRunner */,
+				4BFF99732981868700A5FA6B /* ResticScheduler */,
+			);
+			sourceTree = "<group>";
+		};
+		4BFF99722981868700A5FA6B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4BFF99712981868700A5FA6B /* Restic Scheduler.app */,
+				4BFF999B2981873100A5FA6B /* Restic Runner.xpc */,
+				4BFF005C29829EB700E22558 /* ResticSchedulerKit.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4BFF99732981868700A5FA6B /* ResticScheduler */ = {
+			isa = PBXGroup;
+			children = (
+				4B5531D92986E2CA003C9B5B /* AdvancedSettings.swift */,
+				4B5531D72986E2B7003C9B5B /* AdvancedSettingsView.swift */,
+				4BFF99CA2981BE3C00A5FA6B /* AppDelegate.swift */,
+				4BFF99C62981BE3C00A5FA6B /* AppEnvironment.swift */,
+				4BFF99782981868800A5FA6B /* Assets.xcassets */,
+				4BFF99C72981BE3C00A5FA6B /* EditableList.swift */,
+				4BFF99CC2981BE3C00A5FA6B /* EditableListView.swift */,
+				4BFF99CE2981BE3C00A5FA6B /* GeneralSettings.swift */,
+				4BFF99C42981BE3C00A5FA6B /* GeneralSettingsView.swift */,
+				4BCFA52C2A505EFC00132BF6 /* Info.plist */,
+				4BFF997A2981868800A5FA6B /* Preview Content */,
+				4BFF99DA2981C18C00A5FA6B /* ResticRunnerService.swift */,
+				4BFF997D2981868800A5FA6B /* ResticScheduler.entitlements */,
+				4BDF2AFC2988653100B413CA /* ResticScheduler.swift */,
+				4BFF99742981868700A5FA6B /* ResticSchedulerApp.swift */,
+				4BFF99CB2981BE3C00A5FA6B /* ResticSettings.swift */,
+				4BFF99C82981BE3C00A5FA6B /* ResticSettingsView.swift */,
+				4BFF99CD2981BE3C00A5FA6B /* SettingsView.swift */,
+				4BFF99C92981BE3C00A5FA6B /* Utilities.swift */,
+			);
+			path = ResticScheduler;
+			sourceTree = "<group>";
+		};
+		4BFF997A2981868800A5FA6B /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				4BFF997B2981868800A5FA6B /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		4BFF999C2981873100A5FA6B /* ResticRunner */ = {
+			isa = PBXGroup;
+			children = (
+				4BFF99A32981873100A5FA6B /* Info.plist */,
+				4BFF99A12981873100A5FA6B /* main.swift */,
+				4BCFA52D2A50854B00132BF6 /* ResticRunner.entitlements */,
+				4BFF999F2981873100A5FA6B /* ResticRunnerService.swift */,
+				4B5531D12985CA0A003C9B5B /* Utilities.swift */,
+			);
+			path = ResticRunner;
+			sourceTree = "<group>";
+		};
+		4BFF99BB2981888700A5FA6B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		4BFF005729829EB700E22558 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BFF005F29829EB700E22558 /* ResticSchedulerKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		4BFF005B29829EB700E22558 /* ResticSchedulerKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BFF006429829EB700E22558 /* Build configuration list for PBXNativeTarget "ResticSchedulerKit" */;
+			buildPhases = (
+				4BFF005729829EB700E22558 /* Headers */,
+				4BFF005829829EB700E22558 /* Sources */,
+				4BFF005929829EB700E22558 /* Frameworks */,
+				4BFF005A29829EB700E22558 /* Resources */,
+				4BDF2B04298DA2EE00B413CA /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ResticSchedulerKit;
+			productName = ResticSchedulerKit;
+			productReference = 4BFF005C29829EB700E22558 /* ResticSchedulerKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		4BFF99702981868700A5FA6B /* Restic Scheduler */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BFF99802981868800A5FA6B /* Build configuration list for PBXNativeTarget "Restic Scheduler" */;
+			buildPhases = (
+				4BFF996D2981868700A5FA6B /* Sources */,
+				4BFF996E2981868700A5FA6B /* Frameworks */,
+				4BFF996F2981868700A5FA6B /* Resources */,
+				4BFF9996298186F000A5FA6B /* Embed XPC Services */,
+				4BFF99BA2981886800A5FA6B /* Embed Frameworks */,
+				4BDF2B02298D94AE00B413CA /* Run Script */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4BFF99A52981873100A5FA6B /* PBXTargetDependency */,
+				4BFF006129829EB700E22558 /* PBXTargetDependency */,
+			);
+			name = "Restic Scheduler";
+			packageProductDependencies = (
+			);
+			productName = ResticScheduler;
+			productReference = 4BFF99712981868700A5FA6B /* Restic Scheduler.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4BFF999A2981873100A5FA6B /* Restic Runner */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BFF99A72981873100A5FA6B /* Build configuration list for PBXNativeTarget "Restic Runner" */;
+			buildPhases = (
+				4BFF99972981873100A5FA6B /* Sources */,
+				4BFF99982981873100A5FA6B /* Frameworks */,
+				4BFF99992981873100A5FA6B /* Resources */,
+				4BFF99DE2981DC2100A5FA6B /* Embed Frameworks */,
+				4BDF2B03298DA2DB00B413CA /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4BFF006C29829FB400E22558 /* PBXTargetDependency */,
+			);
+			name = "Restic Runner";
+			packageProductDependencies = (
+			);
+			productName = ResticRunner;
+			productReference = 4BFF999B2981873100A5FA6B /* Restic Runner.xpc */;
+			productType = "com.apple.product-type.xpc-service";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4BFF99692981868700A5FA6B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1420;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					4BFF005B29829EB700E22558 = {
+						CreatedOnToolsVersion = 14.2;
+						LastSwiftMigration = 1420;
+					};
+					4BFF99702981868700A5FA6B = {
+						CreatedOnToolsVersion = 14.2;
+					};
+					4BFF999A2981873100A5FA6B = {
+						CreatedOnToolsVersion = 14.2;
+					};
+				};
+			};
+			buildConfigurationList = 4BFF996C2981868700A5FA6B /* Build configuration list for PBXProject "ResticScheduler" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4BFF99682981868700A5FA6B;
+			productRefGroup = 4BFF99722981868700A5FA6B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4BFF99702981868700A5FA6B /* Restic Scheduler */,
+				4BFF999A2981873100A5FA6B /* Restic Runner */,
+				4BFF005B29829EB700E22558 /* ResticSchedulerKit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4BFF005A29829EB700E22558 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BFF996F2981868700A5FA6B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BFF997C2981868800A5FA6B /* Preview Assets.xcassets in Resources */,
+				4BFF99792981868800A5FA6B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BFF99992981873100A5FA6B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BFF007129840B9D00E22558 /* restic in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4BDF2B02298D94AE00B413CA /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -eu\n\nINFO_PLIST=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nBUNDLE_VERSION=\"$(git rev-list --all --count)\"\n\necho \"BUNDLE_VERSION: $BUNDLE_VERSION\"\n\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $BUNDLE_VERSION\" \"$INFO_PLIST\"\n";
+		};
+		4BDF2B03298DA2DB00B413CA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -eu\n\nINFO_PLIST=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nBUNDLE_VERSION=\"$(git rev-list --all --count)\"\n\necho \"BUNDLE_VERSION: $BUNDLE_VERSION\"\n\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $BUNDLE_VERSION\" \"$INFO_PLIST\"\n";
+		};
+		4BDF2B04298DA2EE00B413CA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -eu\n\nINFO_PLIST=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nBUNDLE_VERSION=\"$(git rev-list --all --count)\"\n\necho \"BUNDLE_VERSION: $BUNDLE_VERSION\"\n\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $BUNDLE_VERSION\" \"$INFO_PLIST\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4BFF005829829EB700E22558 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BDF2AFF29891B0900B413CA /* Utilities.swift in Sources */,
+				4BFF006829829EF000E22558 /* ResticRunner.swift in Sources */,
+				4BDF2AFB2988622E00B413CA /* ResticScheduler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BFF996D2981868700A5FA6B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BFF99752981868700A5FA6B /* ResticSchedulerApp.swift in Sources */,
+				4BFF99D92981BE3C00A5FA6B /* GeneralSettings.swift in Sources */,
+				4BFF99D52981BE3C00A5FA6B /* AppDelegate.swift in Sources */,
+				4BFF99D72981BE3C00A5FA6B /* EditableListView.swift in Sources */,
+				4BFF99D32981BE3C00A5FA6B /* ResticSettingsView.swift in Sources */,
+				4B5531DA2986E2CA003C9B5B /* AdvancedSettings.swift in Sources */,
+				4BFF99D22981BE3C00A5FA6B /* EditableList.swift in Sources */,
+				4B5531D82986E2B7003C9B5B /* AdvancedSettingsView.swift in Sources */,
+				4BDF2AFD2988653100B413CA /* ResticScheduler.swift in Sources */,
+				4BFF99DB2981C18C00A5FA6B /* ResticRunnerService.swift in Sources */,
+				4BFF99D12981BE3C00A5FA6B /* AppEnvironment.swift in Sources */,
+				4BFF99D42981BE3C00A5FA6B /* Utilities.swift in Sources */,
+				4BFF99D82981BE3C00A5FA6B /* SettingsView.swift in Sources */,
+				4BFF99D62981BE3C00A5FA6B /* ResticSettings.swift in Sources */,
+				4BFF99CF2981BE3C00A5FA6B /* GeneralSettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BFF99972981873100A5FA6B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B5531D22985CA0A003C9B5B /* Utilities.swift in Sources */,
+				4BFF99A02981873100A5FA6B /* ResticRunnerService.swift in Sources */,
+				4BFF99A22981873100A5FA6B /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4BFF006129829EB700E22558 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4BFF005B29829EB700E22558 /* ResticSchedulerKit */;
+			targetProxy = 4BFF006029829EB700E22558 /* PBXContainerItemProxy */;
+		};
+		4BFF006C29829FB400E22558 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4BFF005B29829EB700E22558 /* ResticSchedulerKit */;
+			targetProxy = 4BFF006B29829FB400E22558 /* PBXContainerItemProxy */;
+		};
+		4BFF99A52981873100A5FA6B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4BFF999A2981873100A5FA6B /* Restic Runner */;
+			targetProxy = 4BFF99A42981873100A5FA6B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4BFF006529829EB700E22558 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "$(APP_DEV_TEAM)";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = "${MARKETING_VERSION}";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(FULL_APP_BUNDLE_ID).ResticSchedulerKit";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		4BFF006629829EB700E22558 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = "${MARKETING_VERSION}";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(FULL_APP_BUNDLE_ID).ResticSchedulerKit";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		4BFF997E2981868800A5FA6B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4BCFA52A2A504AE000132BF6 /* Config.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				FULL_APP_BUNDLE_ID = "$(APP_BUNDLE_ID).Debug";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		4BFF997F2981868800A5FA6B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4BCFA52A2A504AE000132BF6 /* Config.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FULL_APP_BUNDLE_ID = "$(APP_BUNDLE_ID)";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		4BFF99812981868800A5FA6B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ResticScheduler/ResticScheduler.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"ResticScheduler/Preview Content\"";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ResticScheduler/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = "${MARKETING_VERSION}";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(FULL_APP_BUNDLE_ID)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		4BFF99822981868800A5FA6B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ResticScheduler/ResticScheduler.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"ResticScheduler/Preview Content\"";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ResticScheduler/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = "${MARKETING_VERSION}";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(FULL_APP_BUNDLE_ID)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		4BFF99A82981873100A5FA6B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "ResticRunner/ResticRunner.entitlements";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ResticRunner/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Restic Runner";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(LD_RUNPATH_SEARCH_PATHS_$(IS_MACCATALYST)_$(_BOOL_$(SKIP_INSTALL)))",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = "${MARKETING_VERSION}";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(FULL_APP_BUNDLE_ID).ResticRunner";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		4BFF99A92981873100A5FA6B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "ResticRunner/ResticRunner.entitlements";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ResticRunner/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Restic Runner";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(LD_RUNPATH_SEARCH_PATHS_$(IS_MACCATALYST)_$(_BOOL_$(SKIP_INSTALL)))",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = "${MARKETING_VERSION}";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(FULL_APP_BUNDLE_ID).ResticRunner";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4BFF006429829EB700E22558 /* Build configuration list for PBXNativeTarget "ResticSchedulerKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BFF006529829EB700E22558 /* Debug */,
+				4BFF006629829EB700E22558 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4BFF996C2981868700A5FA6B /* Build configuration list for PBXProject "ResticScheduler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BFF997E2981868800A5FA6B /* Debug */,
+				4BFF997F2981868800A5FA6B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4BFF99802981868800A5FA6B /* Build configuration list for PBXNativeTarget "Restic Scheduler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BFF99812981868800A5FA6B /* Debug */,
+				4BFF99822981868800A5FA6B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4BFF99A72981873100A5FA6B /* Build configuration list for PBXNativeTarget "Restic Runner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BFF99A82981873100A5FA6B /* Debug */,
+				4BFF99A92981873100A5FA6B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4BFF99692981868700A5FA6B /* Project object */;
+}
