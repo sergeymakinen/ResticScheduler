@@ -195,7 +195,7 @@ class ResticRunnerService: ResticRunnerProtocol {
         }
         reply(nil)
       } else {
-        let error = ProcessError.abnormalTermination(terminationStatus: process.terminationStatus, standardError: String(contentsOfPipe: standardError))
+        let error = ProcessError.abnormalTermination(terminationStatus: process.terminationStatus, standardError: String(contentsOfPipe: standardErrorForResult))
         TypeLogger.function().error("\(error.localizedDescription, privacy: .public)")
         reply(error)
       }
