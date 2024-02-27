@@ -8,13 +8,17 @@ name: goreleaser
 jobs:
   GoReleaser:
     env:
-      RESTIC_VERSION: '0.15.2'
-    runs-on: macos-latest
+      RESTIC_VERSION: '0.16.2'
+    runs-on: macos-13
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
       - name: Prepare restic binary
         run: |
           curl -sL 'https://github.com/restic/restic/releases/download/v${{ env.RESTIC_VERSION }}/restic_${{ env.RESTIC_VERSION }}_darwin_amd64.bz2' | bunzip2 >restic_amd64
@@ -29,7 +33,7 @@ jobs:
         run: |
           (cd Build/Products/Release && zip -9 -r 'Restic Scheduler ${{ github.ref_name }}.zip' 'Restic Scheduler.app')
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v4
+        uses: goreleaser/goreleaser-action@v5
         with:
           distribution: goreleaser
           version: latest

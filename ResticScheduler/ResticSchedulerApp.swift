@@ -1,4 +1,5 @@
 import ResticSchedulerKit
+import SettingsAccess
 import SwiftUI
 
 @main struct ResticSchedulerApp: App {
@@ -28,9 +29,9 @@ import SwiftUI
 
   private var actionLabel: String {
     switch resticScheduler.status {
-    case .stopping: return "Stopping Backup…"
-    case .idle: return "Back Up Now"
-    default: return "Stop This Backup"
+    case .stopping: "Stopping Backup…"
+    case .idle: "Back Up Now"
+    default: "Stop This Backup"
     }
   }
 
@@ -68,8 +69,17 @@ import SwiftUI
       .disabled(resticScheduler.status == .stopping)
       Button("View Restic Logs…", action: showLogs)
       Divider()
-      Button("Settings…") {
-        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+      SettingsLink {
+        Text("Settings…")
+      } preAction: {} postAction: {
+        for window in NSApp.windows {
+          if let windowId = window.identifier?.rawValue {
+            if windowId.contains("Settings") {
+              window.level = .floating
+              break
+            }
+          }
+        }
         NSApp.activate(ignoringOtherApps: true)
       }
       Button("About Restic Scheduler") {
