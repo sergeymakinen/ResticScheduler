@@ -43,19 +43,16 @@ extension Optional: _Optional {
 func isNil(_ value: some Any) -> Bool { (value as? _Optional)?.isNil == true }
 
 @propertyWrapper struct UserDefault<Value> {
+  private let subject = PassthroughSubject<Value, Never>()
   private let defaultValue: Value
   private let key: String
   private let store: UserDefaults
 
+  var projectedValue: AnyPublisher<Value, Never> { subject.eraseToAnyPublisher() }
+
   var wrappedValue: Value {
-    get { store.value(forKey: key) as? Value ?? defaultValue }
-    set {
-      if isNil(newValue) {
-        store.removeObject(forKey: key)
-      } else {
-        store.setValue(newValue, forKey: key)
-      }
-    }
+    get { getValue() }
+    set { setValue(newValue) }
   }
 
   static subscript<EnclosingSelf>(
@@ -63,17 +60,11 @@ func isNil(_ value: some Any) -> Bool { (value as? _Optional)?.isNil == true }
     wrapped _: ReferenceWritableKeyPath<EnclosingSelf, Value>,
     storage storageKeyPath: ReferenceWritableKeyPath<EnclosingSelf, UserDefault>
   ) -> Value {
-    get {
-      let propertyWrapper = instance[keyPath: storageKeyPath]
-      return propertyWrapper.store.value(forKey: propertyWrapper.key) as? Value ?? propertyWrapper.defaultValue
-    }
+    get { instance[keyPath: storageKeyPath].getValue() }
     set {
       let propertyWrapper = instance[keyPath: storageKeyPath]
-      if isNil(newValue) {
-        propertyWrapper.store.removeObject(forKey: propertyWrapper.key)
-      } else {
-        propertyWrapper.store.setValue(newValue, forKey: propertyWrapper.key)
-      }
+      propertyWrapper.setValue(newValue)
+      propertyWrapper.subject.send(newValue)
       if let observableObject = instance as? any ObservableObject {
         (observableObject.objectWillChange as any Publisher as? ObservableObjectPublisher)?.send()
       }
@@ -92,14 +83,16 @@ func isNil(_ value: some Any) -> Bool { (value as? _Optional)?.isNil == true }
   init<T>(_ key: String, store: UserDefaults = .standard) where Value == T? {
     self.init(wrappedValue: nil, key, store: store)
   }
-}
 
-func secErrorMessage(_ status: OSStatus) -> String {
-  if let message = SecCopyErrorMessageString(status, nil) {
-    return message as String
+  private func getValue() -> Value { store.value(forKey: key) as? Value ?? defaultValue }
+
+  private func setValue(_ value: Value) {
+    if isNil(value) {
+      store.removeObject(forKey: key)
+    } else {
+      store.setValue(value, forKey: key)
+    }
   }
-
-  return NSError(domain: NSOSStatusErrorDomain, code: Int(status)).localizedDescription
 }
 
 @propertyWrapper struct KeychainPassword {
@@ -112,7 +105,7 @@ func secErrorMessage(_ status: OSStatus) -> String {
   private let queue: DispatchQueue
 
   var wrappedValue: String {
-    get { value() }
+    get { getValue() }
     set { setValue(newValue) }
   }
 
@@ -121,7 +114,7 @@ func secErrorMessage(_ status: OSStatus) -> String {
     wrapped _: ReferenceWritableKeyPath<EnclosingSelf, String>,
     storage storageKeyPath: ReferenceWritableKeyPath<EnclosingSelf, KeychainPassword>
   ) -> String {
-    get { instance[keyPath: storageKeyPath].value() }
+    get { instance[keyPath: storageKeyPath].getValue() }
     set {
       instance[keyPath: storageKeyPath].setValue(newValue) {
         if let observableObject = instance as? any ObservableObject {
@@ -141,19 +134,19 @@ func secErrorMessage(_ status: OSStatus) -> String {
     self.init(account, withLabel: account)
   }
 
-  private func value() -> String {
-    let query = [
+  private func getValue() -> String {
+    let query: [CFString: Any] = [
       kSecClass: kSecClassGenericPassword,
       kSecAttrService: Self.service,
       kSecAttrAccount: account,
       kSecReturnData: true,
       kSecMatchLimit: kSecMatchLimitOne,
-    ] as CFDictionary
+    ]
     var item: CFTypeRef?
     let status = SecItemCopyMatching(query as CFDictionary, &item)
     guard status != errSecItemNotFound else { return "" }
     guard status == errSecSuccess else {
-      TypeLogger.function().error("\(secErrorMessage(status), privacy: .public)")
+      TypeLogger.function().error("Couldn't get keychain item: \(secErrorMessage(status), privacy: .public)")
       return ""
     }
 
@@ -176,11 +169,19 @@ func secErrorMessage(_ status: OSStatus) -> String {
         status = SecItemUpdate(query as CFDictionary, update)
       }
       guard status == errSecSuccess else {
-        TypeLogger.function().error("\(secErrorMessage(status), privacy: .public)")
+        TypeLogger.function().error("Couldn't set keychain item: \(secErrorMessage(status), privacy: .public)")
         return
       }
 
       completion()
     }
   }
+}
+
+func secErrorMessage(_ status: OSStatus) -> String {
+  if let message = SecCopyErrorMessageString(status, nil) {
+    return message as String
+  }
+
+  return NSError(domain: NSOSStatusErrorDomain, code: Int(status)).localizedDescription
 }
