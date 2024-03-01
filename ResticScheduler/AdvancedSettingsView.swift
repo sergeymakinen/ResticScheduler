@@ -58,7 +58,7 @@ struct AdvancedSettingsView: View {
             .disabled(advancedSettings.hostType == .system)
         }
         LabeledContent("Arguments:") {
-          EditableListView($advancedSettings.arguments, browseable: false)
+          EditableListView($advancedSettings.arguments, isBrowseable: false)
             .offset(x: 0, y: -12)
         }
       }

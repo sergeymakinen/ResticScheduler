@@ -10,14 +10,15 @@ struct EditableListView: View {
   @Namespace private var namespace
   @Environment(\.resetFocus) private var resetFocus
   @State private var appendedID: Int?
-  private var browseable: Bool
+  private var isBrowseable: Bool
 
   var body: some View {
     ScrollViewReader { proxy in
       List($editableList.list, selection: $editableList.selection) { item in
         TextField("", text: item.value)
-          .padding(.leading, -8)
+          .font(.callout)
           .listRowInsets(.init())
+          .listRowSeparator(.hidden)
           .focused($focused, equals: item.id)
       }
       .environment(\.defaultMinListRowHeight, 24)
@@ -35,7 +36,7 @@ struct EditableListView: View {
         VStack(alignment: .leading, spacing: 0) {
           Divider()
           HStack(spacing: 0) {
-            if browseable {
+            if isBrowseable {
               Menu {
                 Button("Browse…", action: { editableList.browse = true })
               } label: {
@@ -72,9 +73,9 @@ struct EditableListView: View {
     }
   }
 
-  init(_ data: Binding<[String]>, browseable: Bool = true) {
+  init(_ data: Binding<[String]>, isBrowseable: Bool = true) {
     editableList = EditableList(data)
-    self.browseable = browseable
+    self.isBrowseable = isBrowseable
   }
 
   private func append(_ value: String) {
