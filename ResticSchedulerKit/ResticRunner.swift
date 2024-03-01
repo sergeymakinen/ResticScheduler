@@ -66,14 +66,14 @@ public enum ProcessError: CustomNSError, LocalizedError, _ObjectiveCBridgeableEr
 
   public var errorCode: Int {
     switch self {
-    case .abnormalTermination: return Code.abnormalTermination.rawValue
+    case .abnormalTermination: Code.abnormalTermination.rawValue
     }
   }
 
   public var errorUserInfo: [String: Any] {
     switch self {
     case let .abnormalTermination(terminationStatus, standardError):
-      return [
+      [
         NSLocalizedDescriptionKey: errorDescription!,
         UserInfoKey.terminationStatus.rawValue: terminationStatus,
         UserInfoKey.standardError.rawValue: standardError,
@@ -83,7 +83,7 @@ public enum ProcessError: CustomNSError, LocalizedError, _ObjectiveCBridgeableEr
 
   public var errorDescription: String? {
     switch self {
-    case let .abnormalTermination(terminationStatus, standardError): return "Process exited with code \(terminationStatus): \(standardError != "" ? standardError : "<no output>")"
+    case let .abnormalTermination(terminationStatus, standardError): "Process exited with code \(terminationStatus): \(standardError != "" ? standardError : "<no output>")"
     }
   }
 
@@ -115,17 +115,17 @@ public enum BackupError: CustomNSError, LocalizedError, _ObjectiveCBridgeableErr
 
   public var errorCode: Int {
     switch self {
-    case .preparationInProcess: return Code.preparationInProcess.rawValue
-    case .backupInProcess: return Code.backupInProcess.rawValue
-    case .backupNotRunning: return Code.backupNotRunning.rawValue
+    case .preparationInProcess: Code.preparationInProcess.rawValue
+    case .backupInProcess: Code.backupInProcess.rawValue
+    case .backupNotRunning: Code.backupNotRunning.rawValue
     }
   }
 
   public var errorDescription: String? {
     switch self {
-    case .preparationInProcess: return "Backup preparation in process"
-    case .backupInProcess: return "Backup in process"
-    case .backupNotRunning: return "Backup not running"
+    case .preparationInProcess: "Backup preparation in process"
+    case .backupInProcess: "Backup in process"
+    case .backupNotRunning: "Backup not running"
     }
   }
 

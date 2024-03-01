@@ -81,7 +81,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
       let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
       self.notificationCenter!.add(request, withCompletionHandler: { error in
         guard error == nil else {
-          TypeLogger.function().warning("Notification request addition error: \(error!.localizedDescription, privacy: .public)")
+          TypeLogger.function().warning("Couldn't add notification request: \(error!.localizedDescription, privacy: .public)")
           return
         }
       })

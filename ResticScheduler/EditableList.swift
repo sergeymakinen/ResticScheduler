@@ -33,9 +33,9 @@ class EditableList: Model {
     super.init()
     publisher = self.data.publisher.sink { [weak self] _ in
       guard let self else { return }
-      guard !self.ignoringChanges else { return }
+      guard !ignoringChanges else { return }
 
-      self.ignoringChanges {
+      ignoringChanges {
         self.selection = nil
         self.id = 0
         self.list = self.data.wrappedValue.map { value in self.makeListItem(value) }

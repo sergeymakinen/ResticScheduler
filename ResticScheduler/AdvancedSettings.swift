@@ -23,8 +23,8 @@ class AdvancedSettings: Model {
       return _error
     }
 
+    private let lock = OSAllocatedUnfairLock()
     private var needRefresh = true
-    private var lock = OSAllocatedUnfairLock()
     private var _value = ""
     private var _error = false
 

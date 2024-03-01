@@ -39,7 +39,7 @@ class ResticScheduler: Model, ResticSchedulerProtocol {
 
   private var isBackupStale: Bool {
     let interval = Duration.seconds(AppEnvironment.shared.backupFrequency)
-    return self.lastSuccessfulBackup == nil || self.lastSuccessfulBackup!.timeIntervalSinceNow >= TimeInterval(interval.components.seconds * 2)
+    return lastSuccessfulBackup == nil || lastSuccessfulBackup!.timeIntervalSinceNow >= TimeInterval(interval.components.seconds * 2)
   }
 
   override private init() {
@@ -120,7 +120,7 @@ class ResticScheduler: Model, ResticSchedulerProtocol {
       backupScheduler!.interval = TimeInterval(interval.components.seconds)
       backupScheduler!.repeats = true
       backupScheduler!.schedule { [weak self] completion in
-        guard let self, let scheduler = self.backupScheduler else {
+        guard let self, let scheduler = backupScheduler else {
           completion(.deferred)
           return
         }
@@ -148,7 +148,7 @@ class ResticScheduler: Model, ResticSchedulerProtocol {
       staleBackupScheduler!.qualityOfService = .background
       staleBackupScheduler!.interval = TimeInterval(Self.staleBackupCheckInterval.components.seconds)
       staleBackupScheduler!.schedule { [weak self] completion in
-        guard let self, let scheduler = self.staleBackupScheduler else {
+        guard let self, let scheduler = staleBackupScheduler else {
           completion(.deferred)
           return
         }
@@ -157,7 +157,7 @@ class ResticScheduler: Model, ResticSchedulerProtocol {
           completion(.deferred)
           return
         }
-        guard self.isBackupStale else {
+        guard isBackupStale else {
           completion(.finished)
           return
         }
@@ -169,7 +169,7 @@ class ResticScheduler: Model, ResticSchedulerProtocol {
           }
         }
       }
-      TypeLogger.function().info("Rescheduled stale backup check, interval: \(Self.staleBackupCheckInterval.formatted(.units(allowed: [.days, .hours, .minutes, .seconds], width: .wide)), privacy: .public), stale: \(self.isBackupStale)")
+      TypeLogger.function().info("Rescheduled stale backup check, interval: \(Self.staleBackupCheckInterval.formatted(.units(allowed: [.days, .hours, .minutes, .seconds], width: .wide)), privacy: .public), stale: \(self.isBackupStale, privacy: .public)")
     }
   }
 }

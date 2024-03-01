@@ -9,10 +9,10 @@ public enum XPCConnectionError: LocalizedError {
 
   public var errorDescription: String? {
     switch self {
-    case .connectionInterrupted: return "XPC connection interrupted"
-    case .connectionInvalidated: return "XPC connection invalidated"
-    case .invalidRemoteObject: return "Invalid XPC remote object"
-    case let .remoteMessageFailed(error): return "XPC remote message failed: \(error.localizedDescription)"
+    case .connectionInterrupted: "XPC connection interrupted"
+    case .connectionInvalidated: "XPC connection invalidated"
+    case .invalidRemoteObject: "Invalid XPC remote object"
+    case let .remoteMessageFailed(error): "XPC remote message failed: \(error.localizedDescription)"
     }
   }
 }
