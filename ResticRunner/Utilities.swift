@@ -7,45 +7,6 @@ extension String {
   }
 }
 
-protocol ReadableFileHandle {
-  var fileHandleForReading: FileHandle { get }
-}
-
-protocol WritableFileHandle {
-  var fileHandleForWriting: FileHandle { get }
-}
-
-extension Pipe: ReadableFileHandle, WritableFileHandle {}
-
-extension FileHandle: ReadableFileHandle, WritableFileHandle {
-  var fileHandleForReading: FileHandle { self }
-
-  var fileHandleForWriting: FileHandle { self }
-}
-
-extension ReadableFileHandle {
-  func duplicate(into handles: WritableFileHandle...) {
-    let group = DispatchGroup()
-    fileHandleForReading.readabilityHandler = { readHandle in
-      let data = readHandle.availableData
-      guard !data.isEmpty else {
-        readHandle.readabilityHandler = nil
-        return
-      }
-
-      for handle in handles {
-        group.enter()
-        handle.fileHandleForWriting.writeabilityHandler = { writeHandle in
-          try! writeHandle.write(contentsOf: data)
-          writeHandle.writeabilityHandler = nil
-          group.leave()
-        }
-      }
-      group.wait()
-    }
-  }
-}
-
 struct RFC3164FormatStyle: FormatStyle {
   typealias FormatInput = Date
   typealias FormatOutput = String

@@ -87,7 +87,7 @@ class ResticRunnerService: ResticRunnerProtocol {
       return
     }
 
-    defer { Self.status.withLock { value in value = .idle } }
+    defer { Self.status.withLock { value in value = .idle }}
     let resticScheduler = OSAllocatedUnfairLock<ResticSchedulerProtocol?>(initialState: nil)
     resticScheduler.withLock { value in
       value = connection.activateRemoteObjectProxyWithErrorHandler(protocol: ResticSchedulerProtocol.self) { error in
@@ -127,12 +127,10 @@ class ResticRunnerService: ResticRunnerProtocol {
       ]
       let standardOutput = Pipe()
       let standardError = Pipe()
-      let standardErrorForLog = Pipe()
-      let standardErrorForResult = Pipe()
-      standardError.duplicate(into: standardErrorForLog, standardErrorForResult)
+      var standardErrorOutput = ""
       process.standardOutput = standardOutput
       process.standardError = standardError
-      let summary = OSAllocatedUnfairLock<String?>(initialState: nil)
+      var summary: String?
       let decoder = JSONDecoder()
       standardOutput.fileHandleForReading.readabilityHandler = { handle in
         let data = handle.availableData
@@ -151,7 +149,7 @@ class ResticRunnerService: ResticRunnerProtocol {
               TypeLogger.function().warning("Invalid status message: \(value ?? "<no value>", privacy: .public)")
             }
           case "summary":
-            summary.withLock { value in value = String(data: data, encoding: .utf8) }
+            summary = String(data: data, encoding: .utf8)
           default:
             break
           }
@@ -160,15 +158,19 @@ class ResticRunnerService: ResticRunnerProtocol {
           TypeLogger.function().warning("Unexpected message: \(value ?? "<no value>", privacy: .public)")
         }
       }
-      standardErrorForLog.fileHandleForReading.readabilityHandler = { handle in
+      standardError.fileHandleForReading.readabilityHandler = { handle in
         let data = handle.availableData
         guard !data.isEmpty else {
           handle.readabilityHandler = nil
           return
         }
 
+        let value = String(data: data, encoding: .utf8)
+        if let value {
+          standardErrorOutput += value
+        }
         do {
-          try String(data: data, encoding: .utf8)?
+          try value?
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .components(separatedBy: "\n")
             .map { value in "                \(value)" }
@@ -176,26 +178,24 @@ class ResticRunnerService: ResticRunnerProtocol {
             .appending("\n")
             .append(to: restic.logURL, encoding: .utf8)
         } catch {
-          TypeLogger.function().warning("Error in writing log: \(error.localizedDescription, privacy: .public)")
+          TypeLogger.function().warning("Coudn't write log: \(error.localizedDescription, privacy: .public)")
         }
       }
       try process.run()
       Self.process.withLock { value in value = process }
       process.waitUntilExit()
       if process.terminationStatus == 0 || process.terminationStatus == 3 {
-        summary.withLock { value in
-          if value != nil {
-            do {
-              try FileManager.default.createDirectory(at: restic.summaryURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-              try value!.write(to: restic.summaryURL, atomically: true, encoding: .utf8)
-            } catch {
-              TypeLogger.function().warning("Error in writing summary: \(error.localizedDescription, privacy: .public)")
-            }
+        if summary != nil {
+          do {
+            try FileManager.default.createDirectory(at: restic.summaryURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try summary!.write(to: restic.summaryURL, atomically: true, encoding: .utf8)
+          } catch {
+            TypeLogger.function().warning("Couldn't write summary: \(error.localizedDescription, privacy: .public)")
           }
         }
         reply(nil)
       } else {
-        let error = ProcessError.abnormalTermination(terminationStatus: process.terminationStatus, standardError: String(contentsOfPipe: standardErrorForResult))
+        let error = ProcessError.abnormalTermination(terminationStatus: process.terminationStatus, standardError: standardErrorOutput.trimmingCharacters(in: .whitespacesAndNewlines))
         TypeLogger.function().error("\(error.localizedDescription, privacy: .public)")
         reply(error)
       }
