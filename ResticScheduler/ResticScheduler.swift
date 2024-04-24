@@ -35,10 +35,12 @@ class ResticScheduler: Model, ResticSchedulerProtocol {
   private let lock = OSAllocatedUnfairLock()
   private var backupScheduler: NSBackgroundActivityScheduler?
   private var staleBackupScheduler: NSBackgroundActivityScheduler?
-  private var subscription: AnyCancellable?
+  private var bag = Set<AnyCancellable>()
 
   private var isBackupStale: Bool {
     let interval = Duration.seconds(AppEnvironment.shared.backupFrequency)
+    guard interval.components.seconds > 0 else { return false }
+
     return lastSuccessfulBackup == nil || lastSuccessfulBackup!.timeIntervalSinceNow >= TimeInterval(interval.components.seconds * 2)
   }
 
@@ -49,7 +51,10 @@ class ResticScheduler: Model, ResticSchedulerProtocol {
     }
     rescheduleBackup()
     rescheduleStaleBackupCheck()
-    subscription = NotificationCenter.default.publisher(for: .NSCalendarDayChanged).sink { [weak self] _ in self?.objectWillChange.send() }
+    NotificationCenter.default.publisher(for: .NSCalendarDayChanged)
+      .receive(on: DispatchQueue.main)
+      .sink { [weak self] _ in self?.objectWillChange.send() }
+      .store(in: &bag)
   }
 
   func progressDidUpdate(percentDone: Float64, bytesDone: UInt64) {
@@ -115,6 +120,8 @@ class ResticScheduler: Model, ResticSchedulerProtocol {
     lock.withLock {
       backupScheduler?.invalidate()
       let interval = Duration.seconds(AppEnvironment.shared.backupFrequency)
+      guard interval.components.seconds > 0 else { return }
+
       backupScheduler = NSBackgroundActivityScheduler(identifier: "\(Bundle.main.bundleIdentifier!).backup")
       backupScheduler!.qualityOfService = .background
       backupScheduler!.interval = TimeInterval(interval.components.seconds)
