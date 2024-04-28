@@ -133,7 +133,7 @@ class AdvancedSettings: Model {
   @Published var binaryVersion = BinaryVersion()
 
   private var previousBinaryType = BinaryType.manual
-  private var binaryVersionSubscriber: AnyCancellable?
+  private var bag = Set<AnyCancellable>()
 
   override init() {
     super.init()
@@ -144,6 +144,8 @@ class AdvancedSettings: Model {
       host = AppEnvironment.shared.resticHost ?? Host.current().localizedName!
       arguments = AppEnvironment.shared.resticArguments
     }
-    binaryVersionSubscriber = binaryVersion.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }
+    binaryVersion.objectWillChange
+      .sink { [weak self] _ in self?.objectWillChange.send() }
+      .store(in: &bag)
   }
 }

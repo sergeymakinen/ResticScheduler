@@ -10,9 +10,12 @@ struct GeneralSettingsView: View {
           .padding(.bottom, 10)
         Picker("Backup frequency:", selection: $generalSettings.backupFrequency) {
           if generalSettings.backupFrequency == .custom {
-            Text("Custom")
-              .tag(GeneralSettings.BackupFrequency.custom)
-            Divider()
+            Group {
+              let frequencySettings = FrequencySettings().current()
+              Text("Automatically every \(frequencySettings.amount) \(frequencySettings.unit)")
+                .tag(GeneralSettings.BackupFrequency.custom)
+              Divider()
+            }
           }
           Text("Automatically every hour")
             .tag(GeneralSettings.BackupFrequency.hourly)
@@ -22,6 +25,12 @@ struct GeneralSettingsView: View {
             .tag(GeneralSettings.BackupFrequency.weekly)
           Text("Manually")
             .tag(GeneralSettings.BackupFrequency.manually)
+          Divider()
+          Text("Custom…")
+            .tag(GeneralSettings.BackupFrequency.customize)
+        }
+        .sheet(isPresented: $generalSettings.customizeFrequency, onDismiss: { generalSettings.customizeFrequency = false }) {
+          FrequencySettingsView()
         }
       }
       .frame(width: 400, alignment: .center)

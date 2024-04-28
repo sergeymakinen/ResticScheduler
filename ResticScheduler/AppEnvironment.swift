@@ -18,7 +18,7 @@ class AppEnvironment {
       .appending(path: "summary.json", directoryHint: .notDirectory)
   }
 
-  var launchAtLogn: Bool {
+  var launchAtLogin: Bool {
     get { SMAppService.mainApp.status == .enabled }
     set {
       do {

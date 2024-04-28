@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B13E7B22BD6875900070AFA /* FrequencySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B13E7B12BD6875900070AFA /* FrequencySettingsView.swift */; };
+		4B13E7B42BD6C36C00070AFA /* FrequencySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B13E7B32BD6C36C00070AFA /* FrequencySettings.swift */; };
 		4B443D3D2B8CBD07007EC294 /* SettingsAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 4B443D3C2B8CBD07007EC294 /* SettingsAccess */; };
 		4B5531D22985CA0A003C9B5B /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5531D12985CA0A003C9B5B /* Utilities.swift */; };
 		4B5531D82986E2B7003C9B5B /* AdvancedSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5531D72986E2B7003C9B5B /* AdvancedSettingsView.swift */; };
@@ -101,6 +103,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4B13E7B12BD6875900070AFA /* FrequencySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencySettingsView.swift; sourceTree = "<group>"; };
+		4B13E7B32BD6C36C00070AFA /* FrequencySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencySettings.swift; sourceTree = "<group>"; };
 		4B5531D12985CA0A003C9B5B /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		4B5531D72986E2B7003C9B5B /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
 		4B5531D92986E2CA003C9B5B /* AdvancedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettings.swift; sourceTree = "<group>"; };
@@ -208,6 +212,8 @@
 				4BFF99782981868800A5FA6B /* Assets.xcassets */,
 				4BFF99C72981BE3C00A5FA6B /* EditableList.swift */,
 				4BFF99CC2981BE3C00A5FA6B /* EditableListView.swift */,
+				4B13E7B32BD6C36C00070AFA /* FrequencySettings.swift */,
+				4B13E7B12BD6875900070AFA /* FrequencySettingsView.swift */,
 				4BFF99CE2981BE3C00A5FA6B /* GeneralSettings.swift */,
 				4BFF99C42981BE3C00A5FA6B /* GeneralSettingsView.swift */,
 				4BCFA52C2A505EFC00132BF6 /* Info.plist */,
@@ -483,7 +489,9 @@
 				4BFF99D92981BE3C00A5FA6B /* GeneralSettings.swift in Sources */,
 				4BFF99D52981BE3C00A5FA6B /* AppDelegate.swift in Sources */,
 				4BFF99D72981BE3C00A5FA6B /* EditableListView.swift in Sources */,
+				4B13E7B22BD6875900070AFA /* FrequencySettingsView.swift in Sources */,
 				4BFF99D32981BE3C00A5FA6B /* ResticSettingsView.swift in Sources */,
+				4B13E7B42BD6C36C00070AFA /* FrequencySettings.swift in Sources */,
 				4B5531DA2986E2CA003C9B5B /* AdvancedSettings.swift in Sources */,
 				4BFF99D22981BE3C00A5FA6B /* EditableList.swift in Sources */,
 				4B5531D82986E2B7003C9B5B /* AdvancedSettingsView.swift in Sources */,

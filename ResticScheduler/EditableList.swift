@@ -26,21 +26,23 @@ class EditableList: Model {
 
   private var id = 0
   private let data: Binding<[String]>
-  private var publisher: AnyCancellable?
+  private var bag = Set<AnyCancellable>()
 
   init(_ data: Binding<[String]>) {
     self.data = data
     super.init()
-    publisher = self.data.publisher.sink { [weak self] _ in
-      guard let self else { return }
-      guard !ignoringChanges else { return }
+    self.data.publisher
+      .sink { [weak self] _ in
+        guard let self else { return }
+        guard !ignoringChanges else { return }
 
-      ignoringChanges {
-        self.selection = nil
-        self.id = 0
-        self.list = self.data.wrappedValue.map { value in self.makeListItem(value) }
+        ignoringChanges {
+          self.selection = nil
+          self.id = 0
+          self.list = self.data.wrappedValue.map { value in self.makeListItem(value) }
+        }
       }
-    }
+      .store(in: &bag)
   }
 
   func append(_ value: String) {
