@@ -5,17 +5,19 @@ import Foundation
   public let password: String
   public let binary: String?
   public let host: String?
+  public let environment: [String: String]
   public let arguments: [String]
   public let includes: [String]
   public let excludes: [String]
   public let logURL: URL
   public let summaryURL: URL
 
-  public init(repository: String, password: String, host: String?, binary: String?, arguments: [String], includes: [String], excludes: [String], logURL: URL, summaryURL: URL) {
+  public init(repository: String, password: String, host: String?, binary: String?, environment: [String: String], arguments: [String], includes: [String], excludes: [String], logURL: URL, summaryURL: URL) {
     self.repository = repository
     self.password = password
     self.host = host
     self.binary = binary
+    self.environment = environment
     self.arguments = arguments
     self.includes = includes
     self.excludes = excludes
@@ -30,6 +32,7 @@ import Foundation
     coder.encode(password, forKey: "password")
     coder.encode(binary, forKey: "binary")
     coder.encode(host, forKey: "host")
+    coder.encode(environment, forKey: "environment")
     coder.encode(arguments, forKey: "arguments")
     coder.encode(includes, forKey: "includes")
     coder.encode(excludes, forKey: "excludes")
@@ -42,6 +45,7 @@ import Foundation
     password = coder.decodeObject(of: NSString.self, forKey: "password")! as String
     binary = coder.decodeObject(of: NSString.self, forKey: "binary") as String?
     host = coder.decodeObject(of: NSString.self, forKey: "host") as String?
+    environment = coder.decodeDictionary(withKeyClass: NSString.self, objectClass: NSString.self, forKey: "environment")! as [String: String]
     arguments = coder.decodeArrayOfObjects(ofClass: NSString.self, forKey: "arguments")! as [String]
     includes = coder.decodeArrayOfObjects(ofClass: NSString.self, forKey: "includes")! as [String]
     excludes = coder.decodeArrayOfObjects(ofClass: NSString.self, forKey: "excludes")! as [String]

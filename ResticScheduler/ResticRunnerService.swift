@@ -42,6 +42,7 @@ extension Restic {
       password: AppEnvironment.shared.resticPassword,
       host: AppEnvironment.shared.resticHost,
       binary: AppEnvironment.shared.resticBinary,
+      environment: AppEnvironment.shared.resticEnvironment,
       arguments: AppEnvironment.shared.resticArguments,
       includes: AppEnvironment.shared.resticIncludes,
       excludes: AppEnvironment.shared.resticExcludes,

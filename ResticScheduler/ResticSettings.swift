@@ -2,12 +2,22 @@ import Combine
 
 class ResticSettings: Model {
   enum RepositoryType {
-    case local, sftp, rest, browse
+    case local, sftp, rest, s3, browse
+
+    var hasAddress: Bool {
+      switch self {
+      case .local, .browse:
+          return false
+      case .sftp, .rest, .s3:
+          return true
+      }
+    }
   }
 
   enum RepositoryPrefix: String {
     case sftp = "sftp:"
     case rest = "rest:"
+    case s3 = "s3:"
   }
 
   @Published var repositoryType = RepositoryType.local {
@@ -20,18 +30,15 @@ class ResticSettings: Model {
       guard !ignoringChanges else { return }
       guard repositoryType != oldValue else { return }
 
-      switch repositoryType {
-      case .rest, .sftp:
+      if repositoryType == .browse {
+          browseRepository = true
+          ignoringChanges {
+              repositoryType = previousRepositoryType
+          }
+      } else {
         ignoringChanges {
           repository = ""
         }
-      case .browse:
-        browseRepository = true
-        ignoringChanges {
-          repositoryType = previousRepositoryType
-        }
-      default:
-        break
       }
       ResticScheduler.shared.rescheduleStaleBackupCheck()
     }
@@ -47,10 +54,32 @@ class ResticSettings: Model {
         AppEnvironment.shared.resticRepository = RepositoryPrefix.sftp.rawValue + repository
       case .rest:
         AppEnvironment.shared.resticRepository = RepositoryPrefix.rest.rawValue + repository
+      case .s3:
+        AppEnvironment.shared.resticRepository = RepositoryPrefix.s3.rawValue + repository
       default:
         AppEnvironment.shared.resticRepository = repository
       }
       ResticScheduler.shared.lastSuccessfulBackup = nil
+      ResticScheduler.shared.rescheduleStaleBackupCheck()
+    }
+  }
+
+  @Published var s3AccessKeyId = "" {
+    didSet {
+      guard !ignoringChanges else { return }
+      guard s3AccessKeyId != oldValue else { return }
+
+      AppEnvironment.shared.s3AccessKeyId = s3AccessKeyId
+      ResticScheduler.shared.rescheduleStaleBackupCheck()
+    }
+  }
+
+  @Published var s3SecretAccessKey = "" {
+    didSet {
+      guard !ignoringChanges else { return }
+      guard s3SecretAccessKey != oldValue else { return }
+
+      AppEnvironment.shared.s3SecretAccessKey = s3SecretAccessKey
       ResticScheduler.shared.rescheduleStaleBackupCheck()
     }
   }
@@ -96,6 +125,8 @@ class ResticSettings: Model {
         repositoryType = .sftp
       case resticRepository.hasPrefix(RepositoryPrefix.rest.rawValue):
         repositoryType = .rest
+      case resticRepository.hasPrefix(RepositoryPrefix.s3.rawValue):
+        repositoryType = .s3
       default:
         repositoryType = .local
       }
@@ -104,9 +135,13 @@ class ResticSettings: Model {
         repository = resticRepository.droppingPrefix(RepositoryPrefix.sftp.rawValue)
       case .rest:
         repository = resticRepository.droppingPrefix(RepositoryPrefix.rest.rawValue)
+      case .s3:
+        repository = resticRepository.droppingPrefix(RepositoryPrefix.s3.rawValue)
       default:
         repository = resticRepository
       }
+      s3AccessKeyId = AppEnvironment.shared.s3AccessKeyId
+      s3SecretAccessKey = AppEnvironment.shared.s3SecretAccessKey
       password = AppEnvironment.shared.resticPassword
       includes = AppEnvironment.shared.resticIncludes
       excludes = AppEnvironment.shared.resticExcludes

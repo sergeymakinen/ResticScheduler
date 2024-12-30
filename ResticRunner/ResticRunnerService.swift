@@ -99,6 +99,7 @@ class ResticRunnerService: ResticRunnerProtocol {
     process.qualityOfService = .background
     process.executableURL = restic.executableURL
     var environment = ProcessInfo.processInfo.environment
+    environment.merge(restic.environment, uniquingKeysWith: { _, new in new })
     environment["RESTIC_REPOSITORY"] = restic.repository
     environment["RESTIC_PASSWORD"] = restic.password
     environment["RESTIC_PROGRESS_FPS"] = "0.2"

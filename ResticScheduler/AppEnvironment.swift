@@ -33,8 +33,14 @@ class AppEnvironment {
     }
   }
 
+  var resticEnvironment: [String: String] {
+    ["AWS_ACCESS_KEY_ID": s3AccessKeyId, "AWS_SECRET_ACCESS_KEY": s3SecretAccessKey]
+  }
+
   @UserDefault("BackupFrequency") var backupFrequency = 86400
   @UserDefault("ResticRepository") var resticRepository = FileManager.default.temporaryDirectory.path(percentEncoded: false)
+  @UserDefault("ResticS3AccessKeyId") var s3AccessKeyId = ""
+  @KeychainPassword("ResticS3SecretAccessKey") var s3SecretAccessKey
   @KeychainPassword("ResticPassword") var resticPassword
   @UserDefault("ResticBinary") var resticBinary: String?
   @UserDefault("ResticHost") var resticHost: String?

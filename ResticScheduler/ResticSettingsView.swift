@@ -23,6 +23,8 @@ struct ResticSettingsView: View {
             .tag(ResticSettings.RepositoryType.sftp)
           Text("Rest")
             .tag(ResticSettings.RepositoryType.rest)
+          Text("S3")
+            .tag(ResticSettings.RepositoryType.s3)
           Text("Browse…")
             .tag(ResticSettings.RepositoryType.browse)
         }
@@ -30,9 +32,13 @@ struct ResticSettingsView: View {
           resticSettings.repositoryType = .local
           resticSettings.repository = try! result.get().path(percentEncoded: false)
         })
-        if [ResticSettings.RepositoryType.sftp, ResticSettings.RepositoryType.rest].contains(resticSettings.repositoryType) {
+        if resticSettings.repositoryType.hasAddress {
           TextField("Address:", text: $resticSettings.repository)
             .padding(.bottom, 10)
+        }
+        if resticSettings.repositoryType == .s3 {
+            TextField("Access Key ID:", text: $resticSettings.s3AccessKeyId)
+            SecureField("Secret Access Key:", text: $resticSettings.s3SecretAccessKey)
         }
         SecureField("Password:", text: $resticSettings.password)
         LabeledContent("Included files:") {
