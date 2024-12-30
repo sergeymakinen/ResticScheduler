@@ -99,10 +99,11 @@ class ResticRunnerService: ResticRunnerProtocol {
     process.qualityOfService = .background
     process.executableURL = restic.executableURL
     var environment = ProcessInfo.processInfo.environment
-    environment.merge(restic.environment, uniquingKeysWith: { _, new in new })
     environment["RESTIC_REPOSITORY"] = restic.repository
     environment["RESTIC_PASSWORD"] = restic.password
     environment["RESTIC_PROGRESS_FPS"] = "0.2"
+    environment["AWS_ACCESS_KEY_ID"] = restic.s3AccessKeyId
+    environment["AWS_SECRET_ACCESS_KEY"] = restic.s3SecretAccessKey
     process.environment = environment
     do {
       try FileManager.default.createDirectory(at: restic.logURL.deletingLastPathComponent(), withIntermediateDirectories: true)

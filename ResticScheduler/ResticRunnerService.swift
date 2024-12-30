@@ -39,10 +39,11 @@ extension Restic {
   static func environment() -> Restic {
     Restic(
       repository: AppEnvironment.shared.resticRepository,
+      s3AccessKeyId: AppEnvironment.shared.s3AccessKeyId,
+      s3SecretAccessKey: AppEnvironment.shared.s3SecretAccessKey,
       password: AppEnvironment.shared.resticPassword,
       host: AppEnvironment.shared.resticHost,
       binary: AppEnvironment.shared.resticBinary,
-      environment: AppEnvironment.shared.resticEnvironment,
       arguments: AppEnvironment.shared.resticArguments,
       includes: AppEnvironment.shared.resticIncludes,
       excludes: AppEnvironment.shared.resticExcludes,
