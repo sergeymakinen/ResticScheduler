@@ -34,11 +34,11 @@ struct ResticSettingsView: View {
         })
         if resticSettings.repositoryType.hasAddress {
           TextField("Address:", text: $resticSettings.repository)
-            .padding(.bottom, 10)
-        }
-        if resticSettings.repositoryType == .s3 {
-            TextField("Access Key ID:", text: $resticSettings.s3AccessKeyId)
-            SecureField("Secret Access Key:", text: $resticSettings.s3SecretAccessKey)
+          if resticSettings.repositoryType == .s3 {
+              TextField("Access Key ID:", text: $resticSettings.s3AccessKeyId)
+              SecureField("Secret Access Key:", text: $resticSettings.s3SecretAccessKey)
+          }
+          Spacer(minLength: 18)
         }
         SecureField("Password:", text: $resticSettings.password)
         LabeledContent("Included files:") {
