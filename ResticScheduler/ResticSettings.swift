@@ -69,7 +69,7 @@ class ResticSettings: Model {
       guard !ignoringChanges else { return }
       guard s3AccessKeyId != oldValue else { return }
 
-      AppEnvironment.shared.s3AccessKeyId = s3AccessKeyId
+      AppEnvironment.shared.s3AccessKeyId = s3AccessKeyId == "" ? nil : s3AccessKeyId
       ResticScheduler.shared.rescheduleStaleBackupCheck()
     }
   }
@@ -140,7 +140,7 @@ class ResticSettings: Model {
       default:
         repository = resticRepository
       }
-      s3AccessKeyId = AppEnvironment.shared.s3AccessKeyId
+      s3AccessKeyId = AppEnvironment.shared.s3AccessKeyId ?? ""
       s3SecretAccessKey = AppEnvironment.shared.s3SecretAccessKey
       password = AppEnvironment.shared.resticPassword
       includes = AppEnvironment.shared.resticIncludes
