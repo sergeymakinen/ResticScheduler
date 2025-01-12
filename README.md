@@ -9,7 +9,7 @@ Native macOS menu bar app heavily inspired by Apple's Time Machine to perform sc
 
 * Built-in restic binary (but using a custom one is also possible)
 * Back up every hour, day or week
-* SFTP, rest or local repository types
+* SFTP, rest, S3 (+ compatible) or local repository types
 * List of included/excluded files/folders
 * Custom command-line arguments
 

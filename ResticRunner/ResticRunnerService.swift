@@ -102,6 +102,8 @@ class ResticRunnerService: ResticRunnerProtocol {
     environment["RESTIC_REPOSITORY"] = restic.repository
     environment["RESTIC_PASSWORD"] = restic.password
     environment["RESTIC_PROGRESS_FPS"] = "0.2"
+    environment["AWS_ACCESS_KEY_ID"] = restic.s3AccessKeyId
+    environment["AWS_SECRET_ACCESS_KEY"] = restic.s3SecretAccessKey
     process.environment = environment
     do {
       try FileManager.default.createDirectory(at: restic.logURL.deletingLastPathComponent(), withIntermediateDirectories: true)

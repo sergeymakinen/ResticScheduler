@@ -2,6 +2,8 @@ import Foundation
 
 @objc public class Restic: NSObject, NSSecureCoding {
   public let repository: String
+  public let s3AccessKeyId: String?
+  public let s3SecretAccessKey: String?
   public let password: String
   public let binary: String?
   public let host: String?
@@ -11,8 +13,10 @@ import Foundation
   public let logURL: URL
   public let summaryURL: URL
 
-  public init(repository: String, password: String, host: String?, binary: String?, arguments: [String], includes: [String], excludes: [String], logURL: URL, summaryURL: URL) {
+  public init(repository: String, s3AccessKeyId: String?, s3SecretAccessKey: String?, password: String, host: String?, binary: String?, arguments: [String], includes: [String], excludes: [String], logURL: URL, summaryURL: URL) {
     self.repository = repository
+    self.s3AccessKeyId = s3AccessKeyId
+    self.s3SecretAccessKey = s3SecretAccessKey
     self.password = password
     self.host = host
     self.binary = binary
@@ -27,6 +31,8 @@ import Foundation
 
   public func encode(with coder: NSCoder) {
     coder.encode(repository, forKey: "repository")
+    coder.encode(s3AccessKeyId, forKey: "s3AccessKeyId")
+    coder.encode(s3SecretAccessKey, forKey: "s3SecretAccessKey")
     coder.encode(password, forKey: "password")
     coder.encode(binary, forKey: "binary")
     coder.encode(host, forKey: "host")
@@ -39,6 +45,8 @@ import Foundation
 
   public required init?(coder: NSCoder) {
     repository = coder.decodeObject(of: NSString.self, forKey: "repository")! as String
+    s3AccessKeyId = coder.decodeObject(of: NSString.self, forKey: "s3AccessKeyId") as String?
+    s3SecretAccessKey = coder.decodeObject(of: NSString.self, forKey: "s3SecretAccessKey") as String?
     password = coder.decodeObject(of: NSString.self, forKey: "password")! as String
     binary = coder.decodeObject(of: NSString.self, forKey: "binary") as String?
     host = coder.decodeObject(of: NSString.self, forKey: "host") as String?
