@@ -102,8 +102,12 @@ class ResticRunnerService: ResticRunnerProtocol {
     environment["RESTIC_REPOSITORY"] = restic.repository
     environment["RESTIC_PASSWORD"] = restic.password
     environment["RESTIC_PROGRESS_FPS"] = "0.2"
-    environment["AWS_ACCESS_KEY_ID"] = restic.s3AccessKeyId
-    environment["AWS_SECRET_ACCESS_KEY"] = restic.s3SecretAccessKey
+    if let s3AccessKeyId = restic.s3AccessKeyId {
+      environment["AWS_ACCESS_KEY_ID"] = s3AccessKeyId
+    }
+    if let s3SecretAccessKey = restic.s3SecretAccessKey {
+      environment["AWS_SECRET_ACCESS_KEY"] = s3SecretAccessKey
+    }
     process.environment = environment
     do {
       try FileManager.default.createDirectory(at: restic.logURL.deletingLastPathComponent(), withIntermediateDirectories: true)
@@ -180,7 +184,7 @@ class ResticRunnerService: ResticRunnerProtocol {
             .appending("\n")
             .append(to: restic.logURL, encoding: .utf8)
         } catch {
-          TypeLogger.function().warning("Coudn't write log: \(error.localizedDescription, privacy: .public)")
+          TypeLogger.function().warning("Couldn't write log: \(error.localizedDescription, privacy: .public)")
         }
       }
       try process.run()

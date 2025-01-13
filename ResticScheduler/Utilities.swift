@@ -95,25 +95,30 @@ func isNil(_ value: some Any) -> Bool { (value as? _Optional)?.isNil == true }
   }
 }
 
-@propertyWrapper struct KeychainPassword {
+protocol KeychainPasswordType {}
+extension String: KeychainPasswordType {}
+extension String?: KeychainPasswordType {}
+
+@propertyWrapper struct KeychainPassword<Value: KeychainPasswordType> {
   private typealias TypeLogger = ResticSchedulerKit.TypeLogger<KeychainPassword>
 
-  private static let service = Bundle.main.bundleIdentifier!
+  private static var service: String { Bundle.main.bundleIdentifier! }
+  private static var isOptional: Bool { Value.self == String?.self }
 
   private let account: String
   private let label: String
   private let queue: DispatchQueue
 
-  var wrappedValue: String {
+  var wrappedValue: Value {
     get { getValue() }
     set { setValue(newValue) }
   }
 
   static subscript<EnclosingSelf>(
     _enclosingInstance instance: EnclosingSelf,
-    wrapped _: ReferenceWritableKeyPath<EnclosingSelf, String>,
+    wrapped _: ReferenceWritableKeyPath<EnclosingSelf, Value>,
     storage storageKeyPath: ReferenceWritableKeyPath<EnclosingSelf, KeychainPassword>
-  ) -> String {
+  ) -> Value {
     get { instance[keyPath: storageKeyPath].getValue() }
     set {
       instance[keyPath: storageKeyPath].setValue(newValue) {
@@ -134,7 +139,7 @@ func isNil(_ value: some Any) -> Bool { (value as? _Optional)?.isNil == true }
     self.init(account, withLabel: account)
   }
 
-  private func getValue() -> String {
+  private func getValue() -> Value {
     let query: [CFString: Any] = [
       kSecClass: kSecClassGenericPassword,
       kSecAttrService: Self.service,
@@ -144,32 +149,36 @@ func isNil(_ value: some Any) -> Bool { (value as? _Optional)?.isNil == true }
     ]
     var item: CFTypeRef?
     let status = SecItemCopyMatching(query as CFDictionary, &item)
-    guard status != errSecItemNotFound else { return "" }
+    guard status != errSecItemNotFound else { return (Self.isOptional ? nil : "") as! Value }
     guard status == errSecSuccess else {
       TypeLogger.function().error("Couldn't get keychain item: \(secErrorMessage(status), privacy: .public)")
-      return ""
+      return (Self.isOptional ? nil : "") as! Value
     }
 
-    return String(data: item as? Data ?? Data(), encoding: .utf8) ?? ""
+    let value = String(data: item as? Data ?? Data(), encoding: .utf8)
+    return (Self.isOptional ? value : (value ?? "")) as! Value
   }
 
-  private func setValue(_ value: String, completion: @escaping () -> Void = {}) {
+  private func setValue(_ value: Value, completion: @escaping () -> Void = {}) {
     queue.async {
-      var query: [CFString: Any] = [
+      let query: [CFString: Any] = [
         kSecClass: kSecClassGenericPassword,
         kSecAttrService: Self.service,
         kSecAttrAccount: account,
         kSecAttrLabel: label,
-        kSecValueData: value.data(using: .utf8)!,
       ]
-      var status = SecItemAdd(query as CFDictionary, nil)
-      if status == errSecDuplicateItem {
-        let update = [kSecValueData: query[kSecValueData]] as CFDictionary
-        query.removeValue(forKey: kSecValueData)
-        status = SecItemUpdate(query as CFDictionary, update)
+      var status: OSStatus
+      if isNil(value) {
+        status = SecItemDelete(query as CFDictionary)
+      } else {
+        let update = [kSecValueData: (value as! String).data(using: .utf8)!]
+        status = SecItemAdd(query.merging(update) { _, new in new } as CFDictionary, nil)
+        if status == errSecDuplicateItem {
+          status = SecItemUpdate(query as CFDictionary, update as CFDictionary)
+        }
       }
       guard status == errSecSuccess else {
-        TypeLogger.function().error("Couldn't set keychain item: \(secErrorMessage(status), privacy: .public)")
+        TypeLogger.function().error("Couldn't \(isNil(value) ? "delete" : "set") keychain item: \(secErrorMessage(status), privacy: .public)")
         return
       }
 

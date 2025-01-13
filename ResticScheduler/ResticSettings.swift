@@ -7,9 +7,9 @@ class ResticSettings: Model {
     var hasAddress: Bool {
       switch self {
       case .local, .browse:
-          return false
+        false
       case .sftp, .rest, .s3:
-          return true
+        true
       }
     }
   }
@@ -31,10 +31,10 @@ class ResticSettings: Model {
       guard repositoryType != oldValue else { return }
 
       if repositoryType == .browse {
-          browseRepository = true
-          ignoringChanges {
-              repositoryType = previousRepositoryType
-          }
+        browseRepository = true
+        ignoringChanges {
+          repositoryType = previousRepositoryType
+        }
       } else {
         ignoringChanges {
           repository = ""
@@ -79,7 +79,7 @@ class ResticSettings: Model {
       guard !ignoringChanges else { return }
       guard s3SecretAccessKey != oldValue else { return }
 
-      AppEnvironment.shared.s3SecretAccessKey = s3SecretAccessKey
+      AppEnvironment.shared.s3SecretAccessKey = s3SecretAccessKey == "" ? nil : s3SecretAccessKey
       ResticScheduler.shared.rescheduleStaleBackupCheck()
     }
   }
@@ -141,7 +141,7 @@ class ResticSettings: Model {
         repository = resticRepository
       }
       s3AccessKeyId = AppEnvironment.shared.s3AccessKeyId ?? ""
-      s3SecretAccessKey = AppEnvironment.shared.s3SecretAccessKey
+      s3SecretAccessKey = AppEnvironment.shared.s3SecretAccessKey ?? ""
       password = AppEnvironment.shared.resticPassword
       includes = AppEnvironment.shared.resticIncludes
       excludes = AppEnvironment.shared.resticExcludes

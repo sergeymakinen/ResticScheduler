@@ -36,8 +36,8 @@ class AppEnvironment {
   @UserDefault("BackupFrequency") var backupFrequency = 86400
   @UserDefault("ResticRepository") var resticRepository = FileManager.default.temporaryDirectory.path(percentEncoded: false)
   @UserDefault("ResticS3AccessKeyId") var s3AccessKeyId: String?
-  @KeychainPassword("ResticS3SecretAccessKey") var s3SecretAccessKey
-  @KeychainPassword("ResticPassword") var resticPassword
+  @KeychainPassword("ResticS3SecretAccessKey") var s3SecretAccessKey: String?
+  @KeychainPassword("ResticPassword") var resticPassword: String
   @UserDefault("ResticBinary") var resticBinary: String?
   @UserDefault("ResticHost") var resticHost: String?
   @UserDefault("ResticArguments") var resticArguments = ["--one-file-system", "--exclude-caches"]
