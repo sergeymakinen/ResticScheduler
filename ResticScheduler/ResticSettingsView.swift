@@ -35,19 +35,25 @@ struct ResticSettingsView: View {
         if resticSettings.repositoryType.hasAddress {
           TextField("Address:", text: $resticSettings.repository)
           if resticSettings.repositoryType == .s3 {
-              TextField("Access Key ID:", text: $resticSettings.s3AccessKeyId)
-              SecureField("Secret Access Key:", text: $resticSettings.s3SecretAccessKey)
+            TextField("Access Key ID:", text: $resticSettings.s3AccessKeyId)
+            SecureField("Secret Access Key:", text: $resticSettings.s3SecretAccessKey)
           }
           Spacer(minLength: 18)
         }
         SecureField("Password:", text: $resticSettings.password)
-        LabeledContent("Included files:") {
+        LabeledContent {
           EditableListView($resticSettings.includes)
             .offset(x: 0, y: -12)
+        } label: {
+          Text("Included files:")
+            .offset(y: 3)
         }
-        LabeledContent("Excluded files:") {
+        LabeledContent {
           EditableListView($resticSettings.excludes)
             .offset(x: 0, y: -12)
+        } label: {
+          Text("Excluded files:")
+            .offset(y: 3)
         }
       }
       .animation(.default, value: resticSettings.repositoryType)

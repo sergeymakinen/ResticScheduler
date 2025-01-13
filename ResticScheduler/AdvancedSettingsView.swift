@@ -57,9 +57,12 @@ struct AdvancedSettingsView: View {
             .labelsHidden()
             .disabled(advancedSettings.hostType == .system)
         }
-        LabeledContent("Arguments:") {
+        LabeledContent {
           EditableListView($advancedSettings.arguments, isBrowseable: false)
             .offset(x: 0, y: -12)
+        } label: {
+          Text("Arguments:")
+            .offset(y: 3)
         }
       }
       .frame(width: 400, alignment: .center)
