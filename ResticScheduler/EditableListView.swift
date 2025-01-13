@@ -14,7 +14,7 @@ struct EditableListView: View {
 
   var body: some View {
     ScrollViewReader { proxy in
-      List($editableList.list, selection: $editableList.selection) { item in
+      List($editableList.list, editActions: .move, selection: $editableList.selection) { item in
         TextField("", text: item.value)
           .font(.callout)
           .listRowInsets(.init())
