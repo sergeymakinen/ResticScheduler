@@ -26,7 +26,7 @@ struct AdvancedSettingsView: View {
               .tag(AdvancedSettings.BinaryType.browse)
           }
           .padding(.bottom, advancedSettings.binaryVersion.value == "" ? 10 : 0)
-          .fileImporter(isPresented: $advancedSettings.browseBinary, allowedContentTypes: [.content], onCompletion: { result in
+          .fileImporter(isPresented: $advancedSettings.browseBinary, allowedContentTypes: [.unixExecutable], onCompletion: { result in
             advancedSettings.binary = try! result.get().path(percentEncoded: false)
             advancedSettings.binaryType = .manual
           })
