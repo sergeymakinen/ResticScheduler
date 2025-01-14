@@ -33,7 +33,7 @@ jobs:
         run: |
           (cd Build/Products/Release && zip -9 -r 'Restic Scheduler ${{ github.ref_name }}.zip' 'Restic Scheduler.app')
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v5
+        uses: goreleaser/goreleaser-action@v6
         with:
           distribution: goreleaser
           version: latest
