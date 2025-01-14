@@ -4,6 +4,8 @@ import Foundation
   public let repository: String
   public let s3AccessKeyId: String?
   public let s3SecretAccessKey: String?
+  public let restUsername: String?
+  public let restPassword: String?
   public let password: String
   public let binary: String?
   public let host: String?
@@ -13,10 +15,12 @@ import Foundation
   public let logURL: URL
   public let summaryURL: URL
 
-  public init(repository: String, s3AccessKeyId: String?, s3SecretAccessKey: String?, password: String, host: String?, binary: String?, arguments: [String], includes: [String], excludes: [String], logURL: URL, summaryURL: URL) {
+  public init(repository: String, s3AccessKeyId: String?, s3SecretAccessKey: String?, restUsername: String?, restPassword: String?, password: String, host: String?, binary: String?, arguments: [String], includes: [String], excludes: [String], logURL: URL, summaryURL: URL) {
     self.repository = repository
     self.s3AccessKeyId = s3AccessKeyId
     self.s3SecretAccessKey = s3SecretAccessKey
+    self.restUsername = restUsername
+    self.restPassword = restPassword
     self.password = password
     self.host = host
     self.binary = binary
@@ -33,6 +37,8 @@ import Foundation
     coder.encode(repository, forKey: "repository")
     coder.encode(s3AccessKeyId, forKey: "s3AccessKeyId")
     coder.encode(s3SecretAccessKey, forKey: "s3SecretAccessKey")
+    coder.encode(restUsername, forKey: "restUsername")
+    coder.encode(restPassword, forKey: "restPassword")
     coder.encode(password, forKey: "password")
     coder.encode(binary, forKey: "binary")
     coder.encode(host, forKey: "host")
@@ -47,6 +53,8 @@ import Foundation
     repository = coder.decodeObject(of: NSString.self, forKey: "repository")! as String
     s3AccessKeyId = coder.decodeObject(of: NSString.self, forKey: "s3AccessKeyId") as String?
     s3SecretAccessKey = coder.decodeObject(of: NSString.self, forKey: "s3SecretAccessKey") as String?
+    restUsername = coder.decodeObject(of: NSString.self, forKey: "restUsername") as String?
+    restPassword = coder.decodeObject(of: NSString.self, forKey: "restPassword") as String?
     password = coder.decodeObject(of: NSString.self, forKey: "password")! as String
     binary = coder.decodeObject(of: NSString.self, forKey: "binary") as String?
     host = coder.decodeObject(of: NSString.self, forKey: "host") as String?
@@ -100,7 +108,7 @@ public enum ProcessError: CustomNSError, LocalizedError, _ObjectiveCBridgeableEr
 
     switch error.code {
     case Code.abnormalTermination.rawValue:
-      self = Self.abnormalTermination(
+      self = .abnormalTermination(
         terminationStatus: error.userInfo[UserInfoKey.terminationStatus.rawValue] as! Int32,
         standardError: error.userInfo[UserInfoKey.standardError.rawValue] as! String
       )
@@ -142,11 +150,11 @@ public enum BackupError: CustomNSError, LocalizedError, _ObjectiveCBridgeableErr
 
     switch error.code {
     case Code.preparationInProcess.rawValue:
-      self = Self.preparationInProcess
+      self = .preparationInProcess
     case Code.backupInProcess.rawValue:
-      self = Self.backupInProcess
+      self = .backupInProcess
     case Code.backupNotRunning.rawValue:
-      self = Self.backupNotRunning
+      self = .backupNotRunning
     default:
       return nil
     }

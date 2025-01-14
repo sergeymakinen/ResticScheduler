@@ -84,6 +84,26 @@ class ResticSettings: Model {
     }
   }
 
+  @Published var restUsername = "" {
+    didSet {
+      guard !ignoringChanges else { return }
+      guard restUsername != oldValue else { return }
+
+      AppEnvironment.shared.restUsername = restUsername == "" ? nil : restUsername
+      ResticScheduler.shared.rescheduleStaleBackupCheck()
+    }
+  }
+
+  @Published var restPassword = "" {
+    didSet {
+      guard !ignoringChanges else { return }
+      guard restPassword != oldValue else { return }
+
+      AppEnvironment.shared.restPassword = restPassword == "" ? nil : restPassword
+      ResticScheduler.shared.rescheduleStaleBackupCheck()
+    }
+  }
+
   @Published var password = "" {
     didSet {
       guard !ignoringChanges else { return }
@@ -142,6 +162,8 @@ class ResticSettings: Model {
       }
       s3AccessKeyId = AppEnvironment.shared.s3AccessKeyId ?? ""
       s3SecretAccessKey = AppEnvironment.shared.s3SecretAccessKey ?? ""
+      restUsername = AppEnvironment.shared.restUsername ?? ""
+      restPassword = AppEnvironment.shared.restPassword ?? ""
       password = AppEnvironment.shared.resticPassword
       includes = AppEnvironment.shared.resticIncludes
       excludes = AppEnvironment.shared.resticExcludes

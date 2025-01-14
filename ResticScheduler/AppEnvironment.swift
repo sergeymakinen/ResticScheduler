@@ -37,6 +37,8 @@ class AppEnvironment {
   @UserDefault("ResticRepository") var resticRepository = FileManager.default.temporaryDirectory.path(percentEncoded: false)
   @UserDefault("ResticS3AccessKeyId") var s3AccessKeyId: String?
   @KeychainPassword("ResticS3SecretAccessKey") var s3SecretAccessKey: String?
+  @UserDefault("ResticRESTUsername") var restUsername: String?
+  @KeychainPassword("ResticRESTPassword") var restPassword: String?
   @KeychainPassword("ResticPassword") var resticPassword: String
   @UserDefault("ResticBinary") var resticBinary: String?
   @UserDefault("ResticHost") var resticHost: String?

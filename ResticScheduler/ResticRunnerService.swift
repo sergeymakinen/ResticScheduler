@@ -41,6 +41,8 @@ extension Restic {
       repository: AppEnvironment.shared.resticRepository,
       s3AccessKeyId: AppEnvironment.shared.s3AccessKeyId,
       s3SecretAccessKey: AppEnvironment.shared.s3SecretAccessKey,
+      restUsername: AppEnvironment.shared.restUsername,
+      restPassword: AppEnvironment.shared.restPassword,
       password: AppEnvironment.shared.resticPassword,
       host: AppEnvironment.shared.resticHost,
       binary: AppEnvironment.shared.resticBinary,

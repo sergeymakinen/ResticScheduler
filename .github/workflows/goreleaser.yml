@@ -8,7 +8,7 @@ name: goreleaser
 jobs:
   GoReleaser:
     env:
-      RESTIC_VERSION: '0.16.2'
+      RESTIC_VERSION: '0.17.3'
     runs-on: macos-13
     steps:
       - name: Checkout code

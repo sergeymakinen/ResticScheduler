@@ -108,6 +108,12 @@ class ResticRunnerService: ResticRunnerProtocol {
     if let s3SecretAccessKey = restic.s3SecretAccessKey {
       environment["AWS_SECRET_ACCESS_KEY"] = s3SecretAccessKey
     }
+    if let restUsername = restic.restUsername {
+      environment["RESTIC_REST_USERNAME"] = restUsername
+    }
+    if let restPassword = restic.restPassword {
+      environment["RESTIC_REST_PASSWORD"] = restPassword
+    }
     process.environment = environment
     do {
       try FileManager.default.createDirectory(at: restic.logURL.deletingLastPathComponent(), withIntermediateDirectories: true)

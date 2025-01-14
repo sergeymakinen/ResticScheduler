@@ -21,7 +21,7 @@ struct ResticSettingsView: View {
           }
           Text("SFTP")
             .tag(ResticSettings.RepositoryType.sftp)
-          Text("Rest")
+          Text("REST")
             .tag(ResticSettings.RepositoryType.rest)
           Text("S3")
             .tag(ResticSettings.RepositoryType.s3)
@@ -37,6 +37,10 @@ struct ResticSettingsView: View {
           if resticSettings.repositoryType == .s3 {
             TextField("Access Key ID:", text: $resticSettings.s3AccessKeyId)
             SecureField("Secret Access Key:", text: $resticSettings.s3SecretAccessKey)
+          }
+          if resticSettings.repositoryType == .rest {
+            TextField("REST username:", text: $resticSettings.restUsername)
+            SecureField("REST password:", text: $resticSettings.restPassword)
           }
           Spacer(minLength: 18)
         }
