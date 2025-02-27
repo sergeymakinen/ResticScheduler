@@ -1,5 +1,5 @@
 --swiftversion 5.9
 --header strip
---indent 2
 --disable yodaConditions
---enable blankLinesBetweenImports,isEmpty
+--enable blankLinesBetweenImports,isEmpty,propertyTypes,wrapConditionalBodies
+--propertytypes inferred

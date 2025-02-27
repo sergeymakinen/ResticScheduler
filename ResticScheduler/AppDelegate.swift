@@ -1,6 +1,6 @@
 import Cocoa
 import ResticSchedulerKit
-import UserNotifications
+@preconcurrency import UserNotifications
 
 class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
   private typealias TypeLogger = ResticSchedulerKit.TypeLogger<AppDelegate>

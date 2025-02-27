@@ -40,7 +40,7 @@ class ResticRunnerService: ResticRunnerProtocol {
   }
 
   private static let status = OSAllocatedUnfairLock(initialState: Status.idle)
-  private static var process = OSAllocatedUnfairLock<Process?>(initialState: nil)
+  private static let process = OSAllocatedUnfairLock<Process?>(initialState: nil)
 
   private let connection: NSXPCConnection
 

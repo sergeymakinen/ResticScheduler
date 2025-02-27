@@ -59,18 +59,18 @@ class GeneralSettings: Model {
       } else {
         backupFrequency = .custom
       }
-      AppEnvironment.shared.$backupFrequency
-        .sink { [weak self] newValue in
-          self?.ignoringChanges {
-            if let frequency = BackupFrequency(rawValue: newValue) {
-              self?.backupFrequency = frequency
-            } else {
-              self?.backupFrequency = .custom
-            }
-          }
-          self?.objectWillChange.send()
-        }
-        .store(in: &bag)
+//      AppEnvironment.shared.$backupFrequency
+//        .sink { [weak self] newValue in
+//          self?.ignoringChanges {
+//            if let frequency = BackupFrequency(rawValue: newValue) {
+//              self?.backupFrequency = frequency
+//            } else {
+//              self?.backupFrequency = .custom
+//            }
+//          }
+//          self?.objectWillChange.send()
+//        }
+//        .store(in: &bag)
     }
   }
 }

@@ -23,7 +23,7 @@ class ResticScheduler: Model, ResticSchedulerProtocol {
       guard lastSuccessfulBackup != oldValue else { return }
 
       if let lastSuccessfulBackup {
-        AppEnvironment.shared.lastSuccessfulBackupDate = lastSuccessfulBackup.formatted(.iso8601)
+        AppEnvironment.shared.lastSuccessfulBackupDate = lastSuccessfulBackup
       } else {
         AppEnvironment.shared.lastSuccessfulBackupDate = nil
       }
@@ -47,7 +47,7 @@ class ResticScheduler: Model, ResticSchedulerProtocol {
   override private init() {
     super.init()
     ignoringChanges {
-      lastSuccessfulBackup = try? Date(AppEnvironment.shared.lastSuccessfulBackupDate ?? "", strategy: .iso8601)
+      lastSuccessfulBackup = AppEnvironment.shared.lastSuccessfulBackupDate
     }
     rescheduleBackup()
     rescheduleStaleBackupCheck()

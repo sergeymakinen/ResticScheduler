@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,9 @@
 		4B5531D22985CA0A003C9B5B /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5531D12985CA0A003C9B5B /* Utilities.swift */; };
 		4B5531D82986E2B7003C9B5B /* AdvancedSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5531D72986E2B7003C9B5B /* AdvancedSettingsView.swift */; };
 		4B5531DA2986E2CA003C9B5B /* AdvancedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5531D92986E2CA003C9B5B /* AdvancedSettings.swift */; };
+		4B8494DD2D66261200CF669A /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8494DC2D66260F00CF669A /* Storage.swift */; };
+		4B9937602D5F4B7B00EE0D2E /* HookEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B99375F2D5F4B7B00EE0D2E /* HookEditor.swift */; };
+		4B99376A2D622D9000EE0D2E /* ResticSchedulerMacro in Frameworks */ = {isa = PBXBuildFile; productRef = 4B9937692D622D9000EE0D2E /* ResticSchedulerMacro */; };
 		4BDF2AFB2988622E00B413CA /* ResticScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDF2AFA2988622E00B413CA /* ResticScheduler.swift */; };
 		4BDF2AFD2988653100B413CA /* ResticScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDF2AFC2988653100B413CA /* ResticScheduler.swift */; };
 		4BDF2AFF29891B0900B413CA /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDF2AFE29891B0900B413CA /* Utilities.swift */; };
@@ -108,6 +111,9 @@
 		4B5531D12985CA0A003C9B5B /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		4B5531D72986E2B7003C9B5B /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
 		4B5531D92986E2CA003C9B5B /* AdvancedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettings.swift; sourceTree = "<group>"; };
+		4B8494DC2D66260F00CF669A /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		4B99375F2D5F4B7B00EE0D2E /* HookEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookEditor.swift; sourceTree = "<group>"; };
+		4B9937672D61EFDC00EE0D2E /* ResticSchedulerMacro */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ResticSchedulerMacro; sourceTree = "<group>"; };
 		4BCFA52A2A504AE000132BF6 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = SOURCE_ROOT; };
 		4BCFA52C2A505EFC00132BF6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4BCFA52D2A50854B00132BF6 /* ResticRunner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ResticRunner.entitlements; sourceTree = "<group>"; };
@@ -140,6 +146,10 @@
 		4BFF99DA2981C18C00A5FA6B /* ResticRunnerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResticRunnerService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		4B9937632D61E72400EE0D2E /* Utilities */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utilities; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		4BFF005929829EB700E22558 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -152,6 +162,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B99376A2D622D9000EE0D2E /* ResticSchedulerMacro in Frameworks */,
 				4BFF006229829EB700E22558 /* ResticSchedulerKit.framework in Frameworks */,
 				4B443D3D2B8CBD07007EC294 /* SettingsAccess in Frameworks */,
 			);
@@ -182,13 +193,14 @@
 		4BFF99682981868700A5FA6B = {
 			isa = PBXGroup;
 			children = (
-				4BFF006F29840B3900E22558 /* restic */,
 				4BCFA52A2A504AE000132BF6 /* Config.xcconfig */,
-				4BFF005D29829EB700E22558 /* ResticSchedulerKit */,
+				4BFF006F29840B3900E22558 /* restic */,
 				4BFF99BB2981888700A5FA6B /* Frameworks */,
 				4BFF99722981868700A5FA6B /* Products */,
 				4BFF999C2981873100A5FA6B /* ResticRunner */,
 				4BFF99732981868700A5FA6B /* ResticScheduler */,
+				4BFF005D29829EB700E22558 /* ResticSchedulerKit */,
+				4B9937672D61EFDC00EE0D2E /* ResticSchedulerMacro */,
 			);
 			sourceTree = "<group>";
 		};
@@ -216,6 +228,7 @@
 				4B13E7B12BD6875900070AFA /* FrequencySettingsView.swift */,
 				4BFF99CE2981BE3C00A5FA6B /* GeneralSettings.swift */,
 				4BFF99C42981BE3C00A5FA6B /* GeneralSettingsView.swift */,
+				4B99375F2D5F4B7B00EE0D2E /* HookEditor.swift */,
 				4BCFA52C2A505EFC00132BF6 /* Info.plist */,
 				4BFF997A2981868800A5FA6B /* Preview Content */,
 				4BFF99DA2981C18C00A5FA6B /* ResticRunnerService.swift */,
@@ -225,6 +238,8 @@
 				4BFF99CB2981BE3C00A5FA6B /* ResticSettings.swift */,
 				4BFF99C82981BE3C00A5FA6B /* ResticSettingsView.swift */,
 				4BFF99CD2981BE3C00A5FA6B /* SettingsView.swift */,
+				4B8494DC2D66260F00CF669A /* Storage.swift */,
+				4B9937632D61E72400EE0D2E /* Utilities */,
 				4BFF99C92981BE3C00A5FA6B /* Utilities.swift */,
 			);
 			path = ResticScheduler;
@@ -307,9 +322,13 @@
 				4BFF99A52981873100A5FA6B /* PBXTargetDependency */,
 				4BFF006129829EB700E22558 /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				4B9937632D61E72400EE0D2E /* Utilities */,
+			);
 			name = "Restic Scheduler";
 			packageProductDependencies = (
 				4B443D3C2B8CBD07007EC294 /* SettingsAccess */,
+				4B9937692D622D9000EE0D2E /* ResticSchedulerMacro */,
 			);
 			productName = ResticScheduler;
 			productReference = 4BFF99712981868700A5FA6B /* Restic Scheduler.app */;
@@ -370,6 +389,7 @@
 			mainGroup = 4BFF99682981868700A5FA6B;
 			packageReferences = (
 				4B443D3B2B8CBD07007EC294 /* XCRemoteSwiftPackageReference "SettingsAccess" */,
+				4B9937682D622D9000EE0D2E /* XCLocalSwiftPackageReference "ResticSchedulerMacro" */,
 			);
 			productRefGroup = 4BFF99722981868700A5FA6B /* Products */;
 			projectDirPath = "";
@@ -486,6 +506,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BFF99752981868700A5FA6B /* ResticSchedulerApp.swift in Sources */,
+				4B8494DD2D66261200CF669A /* Storage.swift in Sources */,
 				4BFF99D92981BE3C00A5FA6B /* GeneralSettings.swift in Sources */,
 				4BFF99D52981BE3C00A5FA6B /* AppDelegate.swift in Sources */,
 				4BFF99D72981BE3C00A5FA6B /* EditableListView.swift in Sources */,
@@ -497,6 +518,7 @@
 				4B5531D82986E2B7003C9B5B /* AdvancedSettingsView.swift in Sources */,
 				4BDF2AFD2988653100B413CA /* ResticScheduler.swift in Sources */,
 				4BFF99DB2981C18C00A5FA6B /* ResticRunnerService.swift in Sources */,
+				4B9937602D5F4B7B00EE0D2E /* HookEditor.swift in Sources */,
 				4BFF99D12981BE3C00A5FA6B /* AppEnvironment.swift in Sources */,
 				4BFF99D42981BE3C00A5FA6B /* Utilities.swift in Sources */,
 				4BFF99D82981BE3C00A5FA6B /* SettingsView.swift in Sources */,
@@ -877,6 +899,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		4B9937682D622D9000EE0D2E /* XCLocalSwiftPackageReference "ResticSchedulerMacro" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ResticSchedulerMacro;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		4B443D3B2B8CBD07007EC294 /* XCRemoteSwiftPackageReference "SettingsAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -893,6 +922,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4B443D3B2B8CBD07007EC294 /* XCRemoteSwiftPackageReference "SettingsAccess" */;
 			productName = SettingsAccess;
+		};
+		4B9937692D622D9000EE0D2E /* ResticSchedulerMacro */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ResticSchedulerMacro;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
