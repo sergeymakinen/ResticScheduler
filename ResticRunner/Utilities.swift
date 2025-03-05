@@ -43,3 +43,5 @@ extension String {
     }
   }
 }
+
+extension Process: @unchecked Sendable {}

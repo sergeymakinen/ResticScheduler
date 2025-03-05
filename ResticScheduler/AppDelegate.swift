@@ -44,7 +44,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         return
       }
     }
-    ResticScheduler.shared.addNotificationHandler = addNotification
   }
 
   func userNotificationCenter(_: UNUserNotificationCenter, willPresent _: UNNotification) async -> UNNotificationPresentationOptions {

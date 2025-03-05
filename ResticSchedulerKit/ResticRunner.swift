@@ -162,7 +162,7 @@ public enum BackupError: CustomNSError, LocalizedError, _ObjectiveCBridgeableErr
 }
 
 @objc public protocol ResticRunnerProtocol {
-  func version(restic: Restic, reply: @escaping (String?, Error?) -> Void)
+  func version(binary: String?, reply: @escaping (String?, Error?) -> Void)
   func backup(restic: Restic, reply: @escaping (Error?) -> Void)
   func stop(reply: @escaping (Error?) -> Void)
 }

@@ -2,7 +2,7 @@ import Foundation
 import os
 import SwiftUI
 
-protocol UserDefaultObjectRepresentable: Equatable {
+protocol UserDefaultObjectRepresentable {
     init?(userDefaultObject value: Any)
 
     func userDefaultObject() -> Any?
@@ -53,19 +53,17 @@ struct UserDefaultValues {
                 }
                 set {
                     lock.withLock { [weak self] in
-                        guard let self else {
+                        guard let self, shouldChange(newValue) else {
                             return
                         }
 
-                        if shouldSendObjectWillChange(newValue) {
-                            objectWillChange.send()
-                        }
+                        objectWillChange.send()
                         let value: Any? = if let representableValue = newValue as? any UserDefaultObjectRepresentable {
                             representableValue.userDefaultObject()
                         } else {
                             newValue
                         }
-                        if value != nil {
+                        if let value, !isNil(value) {
                             key.store.set(value, forKey: key.key)
                             _value = newValue
                         } else {
@@ -80,67 +78,67 @@ struct UserDefaultValues {
             private let lock = OSAllocatedUnfairLock()
             private let key: any UserDefaultKey.Type
             private var _value: Value
-
             private var isRead = false
 
-            init<K>(key: K.Type) where K: UserDefaultKey, K.Value == Value {
+            init(key: any UserDefaultKey.Type) {
                 self.key = key
-                _value = key.defaultValue
+                _value = key.defaultValue as! Value
             }
 
-            private func shouldSendObjectWillChange(_: Value) -> Bool {
+            private func shouldChange(_: Value) -> Bool {
                 true
             }
 
-            private func shouldSendObjectWillChange(_ newValue: Value) -> Bool where Value: Equatable {
+            private func shouldChange(_ newValue: Value) -> Bool where Value: Equatable {
                 newValue != _value
             }
         }
 
-        var keys: [PartialKeyPath<UserDefaultValues>: any UserDefaultKey.Type] = [:]
-        var values: [ObjectIdentifier: Any] = [:]
+        var keys = OSAllocatedUnfairLock<[PartialKeyPath<UserDefaultValues>: any UserDefaultKey.Type]>(initialState: [:])
+        var values = OSAllocatedUnfairLock<[ObjectIdentifier: Any]>(initialState: [:])
+
+        subscript<T>(key: any UserDefaultKey.Type) -> Value<T> {
+            values.withLock { value in
+                if value[ObjectIdentifier(key)] == nil {
+                    value[ObjectIdentifier(key)] = Value<T>(key: key)
+                }
+                return value[ObjectIdentifier(key)]! as! Value<T>
+            }
+        }
     }
+
+    static var shared = UserDefaultValues()
 
     fileprivate let storage = Storage()
-    private let queue = DispatchQueue(label: "\(Bundle.main.bundleIdentifier!).\(UserDefaultValues.self)", qos: .userInitiated, attributes: .concurrent)
+
+    private init() {}
 
     subscript<K>(key: K.Type) -> K.Value where K: UserDefaultKey {
-        get { queue.sync(flags: .barrier) { self[key].value }}
-        set { queue.sync(flags: .barrier) { self[key].value = newValue }}
+        get { storage[key].value }
+        nonmutating set { storage[key].value = newValue }
     }
 
-    subscript<K>(key: K.Type, registeringKeyPath keyPath: KeyPath<UserDefaultValues, K.Value>) -> K.Value where K: UserDefaultKey {
+    subscript<K>(key: K.Type, forKeyPath keyPath: KeyPath<UserDefaultValues, K.Value>) -> K.Value where K: UserDefaultKey {
         get {
-            queue.sync(flags: .barrier) {
-                storage.keys[keyPath] = key
-                return self[key].value
-            }
+            storage.keys.withLock { value in value[keyPath] = key }
+            return self[key]
         }
-        set {
-            queue.sync(flags: .barrier) {
-                storage.keys[keyPath] = key
-                self[key].value = newValue
-            }
+        nonmutating set {
+            storage.keys.withLock { value in value[keyPath] = key }
+            self[key] = newValue
         }
-    }
-
-    private subscript<K>(key: K.Type) -> Storage.Value<K.Value> where K: UserDefaultKey {
-        if storage.values[ObjectIdentifier(K.self)] == nil {
-            storage.values[ObjectIdentifier(K.self)] = Storage.Value(key: key)
-        }
-        return storage.values[ObjectIdentifier(K.self)]! as! UserDefaultValues.Storage.Value<K.Value>
     }
 }
 
-fileprivate var userDefaultValues = UserDefaultValues()
+extension UserDefaultValues.Storage.Value: @unchecked Sendable where Value: Sendable {}
 
 @propertyWrapper struct UserDefault<Value>: DynamicProperty {
     @StateObject private var value: UserDefaultValues.Storage.Value<Value>
     private let keyPath: KeyPath<UserDefaultValues, Value>
 
     var wrappedValue: Value {
-        get { userDefaultValues[keyPath: keyPath] }
-        nonmutating set { userDefaultValues[keyPath: keyPath as! WritableKeyPath<UserDefaultValues, Value>] = newValue }
+        get { UserDefaultValues.shared[keyPath: keyPath] }
+        nonmutating set { UserDefaultValues.shared[keyPath: keyPath as! WritableKeyPath<UserDefaultValues, Value>] = newValue }
     }
 
     var projectedValue: Binding<Value> {
@@ -153,14 +151,15 @@ fileprivate var userDefaultValues = UserDefaultValues()
 
     init(_ keyPath: KeyPath<UserDefaultValues, Value>) {
         self.keyPath = keyPath
-        let key = userDefaultValues.storage.keys[keyPath]
+        var key = UserDefaultValues.shared.storage.keys.withLock { value in value[keyPath] }
         if key == nil {
-            _ = userDefaultValues[keyPath: keyPath]
+            _ = UserDefaultValues.shared[keyPath: keyPath]
+            key = UserDefaultValues.shared.storage.keys.withLock { value in value[keyPath] }
         }
-        guard let key = userDefaultValues.storage.keys[keyPath], let value = userDefaultValues.storage.values[ObjectIdentifier(key)] as? UserDefaultValues.Storage.Value<Value> else {
-            fatalError("\(keyPath) is not registered with UserDefaultValues.subscript(_:registeringKeyPath:)")
+        guard let key else {
+            fatalError("\(keyPath) is not registered with UserDefaultValues.subscript(_:forKeyPath:)")
         }
 
-        _value = StateObject(wrappedValue: value)
+        _value = StateObject(wrappedValue: UserDefaultValues.shared.storage[key])
     }
 }

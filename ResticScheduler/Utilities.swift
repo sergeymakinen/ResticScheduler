@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 extension String {
     func droppingPrefix(_ prefix: String) -> String {
@@ -16,28 +17,29 @@ extension String {
     }
 }
 
-@available(*, deprecated, message: "Use property wrappers directly in views")
-class Model: ObservableObject {
-    private var ignoreChanges = false
-
-    var ignoringChanges: Bool { ignoreChanges }
-
-    func ignoringChanges(perform action: () -> Void) {
-        let oldValue = ignoreChanges
-        ignoreChanges = true
-        action()
-        ignoreChanges = oldValue
-    }
-}
-
 protocol _Optional {
     static var wrappedType: Any.Type { get }
+    
     var isNil: Bool { get }
 }
 
 extension Optional: _Optional {
     static var wrappedType: Any.Type { Wrapped.self }
+    
     var isNil: Bool { self == nil }
 }
 
-func isNil(_ value: some Any) -> Bool { (value as? _Optional)?.isNil == true }
+func isNil(_ value: some Any) -> Bool {
+    return (value as? _Optional)?.isNil == true
+}
+
+extension Binding {
+    static func optional( _ binding: Binding<Value?>, didSet action: @escaping (() -> Void) = {}) -> Binding<Value> where Value == String {
+        return Binding {
+            binding.wrappedValue ?? ""
+        } set: { newValue in
+            binding.wrappedValue = !newValue.isEmpty ? newValue : nil
+            action()
+        }
+    }
+}

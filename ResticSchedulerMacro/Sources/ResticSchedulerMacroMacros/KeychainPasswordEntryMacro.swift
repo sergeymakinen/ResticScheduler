@@ -76,10 +76,10 @@ extension KeychainPasswordEntryMacro: AccessorMacro {
         return [
             """
             get {
-                self[__Key_\(identifier).self, registeringKeyPath: \\.\(identifier)]
+                self[__Key_\(identifier).self, forKeyPath: \\.\(identifier)]
             }
             set {
-                self[__Key_\(identifier).self, registeringKeyPath: \\.\(identifier)] = newValue
+                self[__Key_\(identifier).self, forKeyPath: \\.\(identifier)] = newValue
             }
             """,
         ]

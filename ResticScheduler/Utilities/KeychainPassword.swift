@@ -95,13 +95,11 @@ struct KeychainPasswordValues {
                         }
 
                         queue.async { [weak self] in
-                            guard let self else {
+                            guard let self, shouldChange(newValue) else {
                                 return
                             }
 
-                            if shouldSendObjectWillChange(newValue) {
-                                objectWillChange.send()
-                            }
+                            objectWillChange.send()
                             let data = newValue.data()
                             let query = key.query
                             var status: OSStatus
@@ -126,70 +124,71 @@ struct KeychainPasswordValues {
                 }
             }
 
-            private let queue = DispatchQueue(label: "\(Bundle.main.bundleIdentifier!).\(Value.self)", qos: .userInitiated, attributes: .concurrent)
+            private let queue = DispatchQueue(label: "\(Bundle.main.bundleIdentifier!).\(Value.self)", qos: .userInitiated)
             private let lock = OSAllocatedUnfairLock()
             private let key: any KeychainPasswordKey.Type
             private var _value: Value
             private var isRead = false
 
-            init<K>(key: K.Type) where K: KeychainPasswordKey, K.Value == Value {
+            init(key: any KeychainPasswordKey.Type) {
                 self.key = key
-                _value = key.defaultValue
+                _value = key.defaultValue as! Value
             }
 
-            private func shouldSendObjectWillChange(_: Value) -> Bool {
+            private func shouldChange(_: Value) -> Bool {
                 true
             }
 
-            private func shouldSendObjectWillChange(_ newValue: Value) -> Bool where Value: Equatable {
+            private func shouldChange(_ newValue: Value) -> Bool where Value: Equatable {
                 newValue != _value
             }
         }
 
-        var keys: [PartialKeyPath<KeychainPasswordValues>: any KeychainPasswordKey.Type] = [:]
-        var values: [ObjectIdentifier: Any] = [:]
+        var keys = OSAllocatedUnfairLock<[PartialKeyPath<KeychainPasswordValues>: any KeychainPasswordKey.Type]>(initialState: [:])
+        var values = OSAllocatedUnfairLock<[ObjectIdentifier: Any]>(initialState: [:])
+
+        subscript<T>(key: any KeychainPasswordKey.Type) -> Value<T> {
+            values.withLock { value in
+                if value[ObjectIdentifier(key)] == nil {
+                    value[ObjectIdentifier(key)] = Value<T>(key: key)
+                }
+                return value[ObjectIdentifier(key)]! as! Value<T>
+            }
+        }
     }
+
+    static var shared = KeychainPasswordValues()
 
     fileprivate let storage = Storage()
-    private let queue = DispatchQueue(label: "\(Bundle.main.bundleIdentifier!).\(KeychainPasswordValues.self)", qos: .userInitiated, attributes: .concurrent)
+
+    private init() {}
 
     subscript<K>(key: K.Type) -> K.Value where K: KeychainPasswordKey {
-        get { queue.sync(flags: .barrier) { self[key].value }}
-        set { queue.sync(flags: .barrier) { self[key].value = newValue }}
+        get { storage[key].value }
+        nonmutating set { storage[key].value = newValue }
     }
 
-    subscript<K>(key: K.Type, registeringKeyPath keyPath: KeyPath<KeychainPasswordValues, K.Value>) -> K.Value where K: KeychainPasswordKey {
+    subscript<K>(key: K.Type, forKeyPath keyPath: KeyPath<KeychainPasswordValues, K.Value>) -> K.Value where K: KeychainPasswordKey {
         get {
-            queue.sync(flags: .barrier) {
-                storage.keys[keyPath] = key
-                return self[key].value
-            }
+            storage.keys.withLock { value in value[keyPath] = key }
+            return self[key]
         }
-        set {
-            queue.sync(flags: .barrier) {
-                storage.keys[keyPath] = key
-                self[key].value = newValue
-            }
+        nonmutating set {
+            storage.keys.withLock { value in value[keyPath] = key }
+            self[key] = newValue
         }
-    }
-
-    private subscript<K>(key: K.Type) -> Storage.Value<K.Value> where K: KeychainPasswordKey {
-        if storage.values[ObjectIdentifier(K.self)] == nil {
-            storage.values[ObjectIdentifier(K.self)] = Storage.Value(key: key)
-        }
-        return storage.values[ObjectIdentifier(K.self)]! as! KeychainPasswordValues.Storage.Value<K.Value>
     }
 }
 
-fileprivate var keychainPasswordValues = KeychainPasswordValues()
+extension KeychainPasswordValues.Storage.Value: @unchecked Sendable where Value: Sendable {}
 
 @propertyWrapper struct KeychainPassword<Value: DataRepresentable>: DynamicProperty {
     @StateObject private var value: KeychainPasswordValues.Storage.Value<Value>
     private let keyPath: KeyPath<KeychainPasswordValues, Value>
 
     var wrappedValue: Value {
-        get { keychainPasswordValues[keyPath: keyPath] }
-        nonmutating set { keychainPasswordValues[keyPath: keyPath as! WritableKeyPath<KeychainPasswordValues, Value>] = newValue }
+        get { KeychainPasswordValues.shared[keyPath: keyPath] }
+        nonmutating set { KeychainPasswordValues.shared[keyPath: keyPath as! WritableKeyPath<KeychainPasswordValues, Value>] = newValue }
     }
 
     var projectedValue: Binding<Value> {
@@ -202,15 +201,16 @@ fileprivate var keychainPasswordValues = KeychainPasswordValues()
 
     init(_ keyPath: KeyPath<KeychainPasswordValues, Value>) {
         self.keyPath = keyPath
-        let key = keychainPasswordValues.storage.keys[keyPath]
+        var key = KeychainPasswordValues.shared.storage.keys.withLock { value in value[keyPath] }
         if key == nil {
-            _ = keychainPasswordValues[keyPath: keyPath]
+            _ = KeychainPasswordValues.shared[keyPath: keyPath]
+            key = KeychainPasswordValues.shared.storage.keys.withLock { value in value[keyPath] }
         }
-        guard let key = keychainPasswordValues.storage.keys[keyPath], let value = keychainPasswordValues.storage.values[ObjectIdentifier(key)] as? KeychainPasswordValues.Storage.Value<Value> else {
-            fatalError("\(keyPath) is not registered with KeychainPasswordValues.subscript(_:registeringKeyPath:)")
+        guard let key else {
+            fatalError("\(keyPath) is not registered with KeychainPasswordValues.subscript(_:forKeyPath:)")
         }
 
-        _value = StateObject(wrappedValue: value)
+        _value = StateObject(wrappedValue: KeychainPasswordValues.shared.storage[key])
     }
 }
 

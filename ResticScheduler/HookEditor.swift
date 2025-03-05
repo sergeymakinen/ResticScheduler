@@ -40,6 +40,7 @@ struct HookEditor: View {
 
             HStack {
                 Toggle("Run", isOn: enabled)
+                
                 let hookType = Binding<HookType> {
                     guard let path = hook.wrappedValue?.path, !path.isEmpty else {
                         return .browse
@@ -78,7 +79,7 @@ struct HookEditor: View {
         }
     }
 
-    init(_ title: some StringProtocol, hook: Binding<Hook?>, hooks: [Hook?] = []) {
+    init(_ title: any StringProtocol, hook: Binding<Hook?>, hooks: [Hook?] = []) {
         self.title = title
         self.hook = hook
         self.hooks = hooks
@@ -86,7 +87,7 @@ struct HookEditor: View {
     }
 }
 
-struct Hook: Codable {
+struct Hook: Codable, Hashable, Equatable {
     let enabled: Bool
     let path: String
     
