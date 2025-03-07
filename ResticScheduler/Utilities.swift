@@ -19,23 +19,23 @@ extension String {
 
 protocol _Optional {
     static var wrappedType: Any.Type { get }
-    
+
     var isNil: Bool { get }
 }
 
 extension Optional: _Optional {
     static var wrappedType: Any.Type { Wrapped.self }
-    
+
     var isNil: Bool { self == nil }
 }
 
 func isNil(_ value: some Any) -> Bool {
-    return (value as? _Optional)?.isNil == true
+    (value as? _Optional)?.isNil == true
 }
 
 extension Binding {
-    static func optional( _ binding: Binding<Value?>, didSet action: @escaping (() -> Void) = {}) -> Binding<Value> where Value == String {
-        return Binding {
+    static func optional(_ binding: Binding<Value?>, didSet action: @escaping (() -> Void) = {}) -> Binding<Value> where Value == String {
+        Binding {
             binding.wrappedValue ?? ""
         } set: { newValue in
             binding.wrappedValue = !newValue.isEmpty ? newValue : nil

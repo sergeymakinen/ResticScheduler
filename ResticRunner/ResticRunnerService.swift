@@ -278,7 +278,7 @@ class ResticRunnerService: ResticRunnerProtocol {
                 let error = ProcessError.abnormalTermination(terminationStatus: process.terminationStatus, standardError: standardErrorOutput.trimmingCharacters(in: .whitespacesAndNewlines))
                 TypeLogger.function().error("Failed to run \(type) hook: \(error.localizedDescription, privacy: .public)")
             }
-                
+
         } catch {
             TypeLogger.function().error("\(error.localizedDescription, privacy: .public)")
         }

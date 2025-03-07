@@ -7,17 +7,17 @@ struct GeneralSettingsView: View {
         case manually = 0
         case hourly = 3600
         case daily = 86400
-        case weekly = 604800
+        case weekly = 604_800
         case custom = -1
         case customize = -2
     }
-    
+
     private typealias TypeLogger = ResticSchedulerKit.TypeLogger<GeneralSettingsView>
 
     @State private var customizeFrequency = false
     @EnvironmentObject private var resticScheduler: ResticScheduler
     @UserDefault(\.backupFrequency) private var backupFrequency
-    
+
     var body: some View {
         VStack {
             Form {
@@ -37,7 +37,7 @@ struct GeneralSettingsView: View {
 
                 Toggle("Launch at login", isOn: launchAtLogin)
                     .padding(.bottom, 10)
-                
+
                 let backupFrequencyType = Binding<BackupFrequencyType> {
                     if let backupFrequencyType = BackupFrequencyType(rawValue: backupFrequency) {
                         backupFrequencyType
@@ -59,7 +59,7 @@ struct GeneralSettingsView: View {
                     if backupFrequencyType.wrappedValue == .custom {
                         Group {
                             let frequency = Frequency(seconds: backupFrequency)
-                            
+
                             Text("Automatically every \(frequency.amount) \(frequency.unit)")
                                 .tag(BackupFrequencyType.custom)
                             Divider()
@@ -92,5 +92,5 @@ struct GeneralSettingsView: View {
 }
 
 #Preview {
-        GeneralSettingsView()
-    }
+    GeneralSettingsView()
+}

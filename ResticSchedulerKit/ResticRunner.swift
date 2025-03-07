@@ -88,7 +88,9 @@ public enum ProcessError: CustomNSError, LocalizedError, _ObjectiveCBridgeableEr
     }
 
     public init?(_bridgedNSError error: NSError) {
-        guard error.domain == Self.errorDomain else { return nil }
+        guard error.domain == Self.errorDomain else {
+            return nil
+        }
 
         switch error.code {
         case Code.abnormalTermination.rawValue:
@@ -130,7 +132,9 @@ public enum BackupError: CustomNSError, LocalizedError, _ObjectiveCBridgeableErr
     }
 
     public init?(_bridgedNSError error: NSError) {
-        guard error.domain == Self.errorDomain else { return nil }
+        guard error.domain == Self.errorDomain else {
+            return nil
+        }
 
         switch error.code {
         case Code.preparationInProcess.rawValue:

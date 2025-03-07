@@ -5,10 +5,9 @@ extension String {
     init(contentsOfPipe pipe: Pipe) {
         self = String(decoding: pipe.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    
+
     func prefixingLines(with prefix: String) -> String {
-        self
-            .trimmingCharacters(in: .whitespacesAndNewlines)
+        trimmingCharacters(in: .whitespacesAndNewlines)
             .components(separatedBy: "\n")
             .map { value in "\(prefix)\(value)" }
             .joined(separator: "\n")

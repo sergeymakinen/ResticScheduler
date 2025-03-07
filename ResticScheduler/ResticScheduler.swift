@@ -128,7 +128,7 @@ class ResticScheduler: ObservableObject, ResticSchedulerProtocol {
             status = .preparation
             var environment = [
                 "RESTIC_REPOSITORY": repository,
-                "RESTIC_PASSWORD": password
+                "RESTIC_PASSWORD": password,
             ]
             if let s3AccessKeyId {
                 environment["AWS_ACCESS_KEY_ID"] = s3AccessKeyId

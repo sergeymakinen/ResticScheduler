@@ -10,12 +10,12 @@ class Frequency: ObservableObject {
         case weekly = 604_800
         case monthly = 2_592_000
     }
-    
+
     private struct FrequencyUnit {
         let type: FrequencyType
         let unit: String
     }
-    
+
     private static let units = [
         FrequencyUnit(type: .monthly, unit: "month"),
         FrequencyUnit(type: .weekly, unit: "week"),
@@ -24,14 +24,14 @@ class Frequency: ObservableObject {
         FrequencyUnit(type: .everyMinute, unit: "minute"),
         FrequencyUnit(type: .everySecond, unit: "second"),
     ]
-    
+
     @Published var frequencyType = FrequencyType.daily
     @Published var amount = "1"
-    
+
     var unit: String {
         Self.units.first(where: { $0.type == frequencyType })!.unit + (amount == "1" ? "" : "s")
     }
-    
+
     var seconds: Int {
         get {
             Int(amount)! * Self.units.first(where: { $0.type == frequencyType })!.type.rawValue
@@ -46,9 +46,9 @@ class Frequency: ObservableObject {
             }
         }
     }
-    
+
     init() {}
-    
+
     init(seconds: Int) {
         self.seconds = seconds
     }
@@ -111,7 +111,7 @@ struct FrequencySettingsView: View {
         }
         .frame(width: 250, alignment: .center)
         .padding()
-        .onAppear { frequency.seconds = backupFrequency}
+        .onAppear { frequency.seconds = backupFrequency }
         .onChange(of: backupFrequency) { _ in
             resticScheduler.rescheduleBackup()
             resticScheduler.rescheduleStaleBackupCheck()

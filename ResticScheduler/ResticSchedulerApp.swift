@@ -4,7 +4,7 @@ import SwiftUI
 
 @main struct ResticSchedulerApp: App {
     private typealias TypeLogger = ResticSchedulerKit.TypeLogger<ResticSchedulerApp>
-    
+
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
     @StateObject private var resticScheduler = ResticScheduler()
     @UserDefault(\.repository) private var repository
