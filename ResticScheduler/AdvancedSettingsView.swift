@@ -51,9 +51,9 @@ struct AdvancedSettingsView: View {
     @UserDefault(\.binary) private var binary
     @UserDefault(\.host) private var host
     @UserDefault(\.arguments) private var arguments
-    @UserDefault(\.beforeBackupHook) private var beforeBackupHook
-    @UserDefault(\.onSuccessHook) private var onSuccessHook
-    @UserDefault(\.onFailureHook) private var onFailureHook
+    @UserDefault(\.beforeBackup) private var beforeBackup
+    @UserDefault(\.onSuccess) private var onSuccess
+    @UserDefault(\.onFailure) private var onFailure
 
     private var image: NSImage {
         let image = NSWorkspace.shared.icon(forFile: binary!)
@@ -145,9 +145,9 @@ struct AdvancedSettingsView: View {
                 }
                 EditableList("Arguments:", values: $arguments, isBrowseable: false)
                     .padding(.bottom)
-                HookEditor("Before backup:", hook: $beforeBackupHook, hooks: [beforeBackupHook, onSuccessHook, onFailureHook])
-                HookEditor("On success:", hook: $onSuccessHook, hooks: [beforeBackupHook, onSuccessHook, onFailureHook])
-                HookEditor("On failure:", hook: $onFailureHook, hooks: [beforeBackupHook, onSuccessHook, onFailureHook])
+                HookEditor("Before backup:", hook: $beforeBackup, hooks: [beforeBackup, onSuccess, onFailure])
+                HookEditor("On success:", hook: $onSuccess, hooks: [beforeBackup, onSuccess, onFailure])
+                HookEditor("On failure:", hook: $onFailure, hooks: [beforeBackup, onSuccess, onFailure])
             }
             .frame(width: 400, alignment: .center)
             .padding()

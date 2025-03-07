@@ -40,7 +40,7 @@ struct HookEditor: View {
 
             HStack {
                 Toggle("Run", isOn: enabled)
-                
+
                 let hookType = Binding<HookType> {
                     guard let path = hook.wrappedValue?.path, !path.isEmpty else {
                         return .browse
@@ -90,12 +90,20 @@ struct HookEditor: View {
 struct Hook: Codable, Hashable, Equatable {
     let enabled: Bool
     let path: String
-    
+
+    var hook: String? {
+        guard enabled, !path.isEmpty else {
+            return nil
+        }
+
+        return path
+    }
+
     init?(enabled: Bool, path: String) {
         guard enabled || !path.isEmpty else {
             return nil
         }
-        
+
         self.enabled = enabled
         self.path = path
     }

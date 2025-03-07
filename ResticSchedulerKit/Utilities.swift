@@ -44,7 +44,7 @@ class Once: Hashable {
   }
 }
 
-public func withCallingReplyOnce<Result, Error>(_ reply: @escaping (Result, Error) -> Void, file: StaticString = #fileID, line: UInt = #line) -> (Result, Error) -> Void {
+public func withCallingReplyOnce<Result, Error>(_ reply: @escaping (Result, Error) -> Void, function: StaticString = #function) -> (Result, Error) -> Void {
   let once = Once()
   return { [weak once] result, error in
     if once?.happen() == true {
@@ -52,11 +52,11 @@ public func withCallingReplyOnce<Result, Error>(_ reply: @escaping (Result, Erro
       return
     }
 
-    Logger.function().warning("Ignored subsequent call at \(file):\(line)")
+    Logger.function().warning("Ignored subsequent call at \(function)")
   }
 }
 
-public func withCallingReplyOnce<Error>(_ reply: @escaping (Error) -> Void, file: StaticString = #fileID, line: UInt = #line) -> (Error) -> Void {
+public func withCallingReplyOnce<Error>(_ reply: @escaping (Error) -> Void, function: StaticString = #function) -> (Error) -> Void {
   let once = Once()
   return { [weak once] error in
     if once?.happen() == true {
@@ -64,7 +64,7 @@ public func withCallingReplyOnce<Error>(_ reply: @escaping (Error) -> Void, file
       return
     }
 
-    Logger.function().warning("Ignored subsequent call at \(file):\(line)")
+    Logger.function().warning("Ignored subsequent call at \(function)")
   }
 }
 

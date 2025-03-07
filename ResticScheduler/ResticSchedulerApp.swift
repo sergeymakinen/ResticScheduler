@@ -3,6 +3,8 @@ import SettingsAccess
 import SwiftUI
 
 @main struct ResticSchedulerApp: App {
+    private typealias TypeLogger = ResticSchedulerKit.TypeLogger<ResticSchedulerApp>
+    
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
     @StateObject private var resticScheduler = ResticScheduler()
     @UserDefault(\.repository) private var repository
@@ -44,7 +46,7 @@ import SwiftUI
     }
 
     var body: some Scene {
-        MenuBarExtra("Restic Scheduler", systemImage: "umbrella.fill") {
+        MenuBarExtra("Restic Scheduler", image: resticScheduler.status == .idle ? "custom.umbrella.fill" : "custom.umbrella.fill.badge.clock") {
             switch resticScheduler.status {
             case .preparation:
                 Text("Preparing Backup…")
@@ -61,7 +63,13 @@ import SwiftUI
             Divider()
             Button(actionLabel) {
                 if resticScheduler.status == .idle {
-                    resticScheduler.backup()
+                    resticScheduler.backup { error in
+                        if let error {
+                            TypeLogger.function().error("Failed to run manual backup: \(error.localizedDescription, privacy: .public)")
+                        } else {
+                            TypeLogger.function().info("Finished manual backup")
+                        }
+                    }
                 } else {
                     resticScheduler.stop()
                 }

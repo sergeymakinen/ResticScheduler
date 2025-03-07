@@ -27,8 +27,26 @@ class ResticRunnerService: ResticRunnerProtocol {
         let bytesDone: UInt64?
     }
 
+    private enum HookType: String, CustomStringConvertible {
+        case beforeBackup = "before_backup"
+        case onSuccess = "on_success"
+        case onFailure = "on_failure"
+
+        var description: String {
+            switch self {
+            case .beforeBackup:
+                "before backup"
+            case .onSuccess:
+                "on success"
+            case .onFailure:
+                "on failure"
+            }
+        }
+    }
+
     private static let status = OSAllocatedUnfairLock(initialState: Status.idle)
     private static let process = OSAllocatedUnfairLock<Process?>(initialState: nil)
+    private static let logPadding = String(repeating: " ", count: 16)
 
     private let connection: NSXPCConnection
 
@@ -61,7 +79,7 @@ class ResticRunnerService: ResticRunnerProtocol {
         }
     }
 
-    func backup(restic: Restic, reply: @escaping (Error?) -> Void) {
+    func backup(binary: String?, options: BackupOptions, reply: @escaping (Error?) -> Void) {
         let idle = Self.status.withLock { value in
             if value != .idle {
                 reply(value == .preparation ? BackupError.preparationInProcess : BackupError.backupInProcess)
@@ -85,27 +103,16 @@ class ResticRunnerService: ResticRunnerProtocol {
         }
         let process = Process()
         process.qualityOfService = .background
-        process.executableURL = resticURL(forBinary: restic.binary)
-        var environment = ProcessInfo.processInfo.environment
-        environment["RESTIC_REPOSITORY"] = restic.repository
-        environment["RESTIC_PASSWORD"] = restic.password
-        environment["RESTIC_PROGRESS_FPS"] = "0.2"
-        if let s3AccessKeyId = restic.s3AccessKeyId {
-            environment["AWS_ACCESS_KEY_ID"] = s3AccessKeyId
-        }
-        if let s3SecretAccessKey = restic.s3SecretAccessKey {
-            environment["AWS_SECRET_ACCESS_KEY"] = s3SecretAccessKey
-        }
-        if let restUsername = restic.restUsername {
-            environment["RESTIC_REST_USERNAME"] = restUsername
-        }
-        if let restPassword = restic.restPassword {
-            environment["RESTIC_REST_PASSWORD"] = restPassword
-        }
-        process.environment = environment
+        process.executableURL = resticURL(forBinary: binary)
+        process.environment = ProcessInfo.processInfo.environment
+            .merging(options.environment) { _, new in new }
+            .merging(["RESTIC_PROGRESS_FPS": "0.2"]) { _, new in new }
         do {
-            try FileManager.default.createDirectory(at: restic.logURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-            try "\(Date().formatted(.rfc3164)) Starting backup...\n".append(to: restic.logURL, encoding: .utf8)
+            try FileManager.default.createDirectory(at: options.logURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try "\(Date().formatted(.rfc3164)) Starting backup...\n".append(to: options.logURL, encoding: .utf8)
+            if let beforeBackup = options.beforeBackup {
+                runHook(beforeBackup, ofType: .beforeBackup, loggingTo: options.logURL)
+            }
             let cacheURL = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
                 .appending(path: Bundle.main.bundleIdentifier!, directoryHint: .isDirectory)
             try FileManager.default.createDirectory(at: cacheURL, withIntermediateDirectories: true)
@@ -114,14 +121,13 @@ class ResticRunnerService: ResticRunnerProtocol {
             try FileManager.default.createDirectory(at: supportURL, withIntermediateDirectories: true)
             let includesURL = supportURL.appending(path: "includes", directoryHint: .notDirectory)
             let excludesURL = supportURL.appending(path: "excludes", directoryHint: .notDirectory)
-            try restic.includes.joined(separator: "\n").write(to: includesURL, atomically: true, encoding: .utf8)
-            try restic.excludes.joined(separator: "\n").write(to: excludesURL, atomically: true, encoding: .utf8)
+            try options.includes.joined(separator: "\n").write(to: includesURL, atomically: true, encoding: .utf8)
+            try options.excludes.joined(separator: "\n").write(to: excludesURL, atomically: true, encoding: .utf8)
             process.arguments = [
                 "--json",
-                "--host", restic.host ?? Host.current().localizedName!,
                 "--cache-dir", cacheURL.path(percentEncoded: false), "--cleanup-cache",
                 "backup",
-            ] + restic.arguments + [
+            ] + options.arguments + [
                 "--files-from", includesURL.path(percentEncoded: false),
                 "--exclude-file", excludesURL.path(percentEncoded: false),
             ]
@@ -171,12 +177,8 @@ class ResticRunnerService: ResticRunnerProtocol {
                 }
                 do {
                     try value?
-                        .trimmingCharacters(in: .whitespacesAndNewlines)
-                        .components(separatedBy: "\n")
-                        .map { value in "                \(value)" }
-                        .joined(separator: "\n")
-                        .appending("\n")
-                        .append(to: restic.logURL, encoding: .utf8)
+                        .prefixingLines(with: Self.logPadding)
+                        .append(to: options.logURL, encoding: .utf8)
                 } catch {
                     TypeLogger.function().warning("Couldn't write log: \(error.localizedDescription, privacy: .public)")
                 }
@@ -187,16 +189,32 @@ class ResticRunnerService: ResticRunnerProtocol {
             if process.terminationStatus == 0 || process.terminationStatus == 3 {
                 if summary != nil {
                     do {
-                        try FileManager.default.createDirectory(at: restic.summaryURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-                        try summary!.write(to: restic.summaryURL, atomically: true, encoding: .utf8)
+                        try FileManager.default.createDirectory(at: options.summaryURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+                        try summary!.write(to: options.summaryURL, atomically: true, encoding: .utf8)
                     } catch {
                         TypeLogger.function().warning("Couldn't write summary: \(error.localizedDescription, privacy: .public)")
                     }
+                }
+                if let onSuccess = options.onSuccess {
+                    runHook(onSuccess, ofType: .onSuccess, loggingTo: options.logURL)
+                }
+                do {
+                    try "\n".append(to: options.logURL, encoding: .utf8)
+                } catch {
+                    TypeLogger.function().warning("Couldn't write log: \(error.localizedDescription, privacy: .public)")
                 }
                 reply(nil)
             } else {
                 let error = ProcessError.abnormalTermination(terminationStatus: process.terminationStatus, standardError: standardErrorOutput.trimmingCharacters(in: .whitespacesAndNewlines))
                 TypeLogger.function().error("\(error.localizedDescription, privacy: .public)")
+                if let onFailure = options.onFailure {
+                    runHook(onFailure, ofType: .onFailure, loggingTo: options.logURL)
+                }
+                do {
+                    try "\n".append(to: options.logURL, encoding: .utf8)
+                } catch {
+                    TypeLogger.function().warning("Couldn't write log: \(error.localizedDescription, privacy: .public)")
+                }
                 reply(error)
             }
         } catch {
@@ -216,6 +234,53 @@ class ResticRunnerService: ResticRunnerProtocol {
 
             value!.terminate()
             reply(nil)
+        }
+    }
+
+    private func runHook(_ hook: String, ofType type: HookType, loggingTo logURL: URL) {
+        do {
+            try "\(Self.logPadding)Invoking \(type) hook...\n".append(to: logURL, encoding: .utf8)
+        } catch {
+            TypeLogger.function().warning("Couldn't write log: \(error.localizedDescription, privacy: .public)")
+        }
+        let process = Process()
+        process.qualityOfService = .background
+        process.executableURL = URL(fileURLWithPath: hook)
+        process.arguments = [type.rawValue]
+        process.environment = ProcessInfo.processInfo.environment
+        process.standardOutput = nil
+        let standardError = Pipe()
+        var standardErrorOutput = ""
+        process.standardError = standardError
+        do {
+            standardError.fileHandleForReading.readabilityHandler = { handle in
+                let data = handle.availableData
+                guard !data.isEmpty else {
+                    handle.readabilityHandler = nil
+                    return
+                }
+
+                let value = String(data: data, encoding: .utf8)
+                if let value {
+                    standardErrorOutput += value
+                }
+                do {
+                    try value?
+                        .prefixingLines(with: Self.logPadding)
+                        .append(to: logURL, encoding: .utf8)
+                } catch {
+                    TypeLogger.function().warning("Couldn't write log: \(error.localizedDescription, privacy: .public)")
+                }
+            }
+            try process.run()
+            process.waitUntilExit()
+            if process.terminationStatus != 0 {
+                let error = ProcessError.abnormalTermination(terminationStatus: process.terminationStatus, standardError: standardErrorOutput.trimmingCharacters(in: .whitespacesAndNewlines))
+                TypeLogger.function().error("Failed to run \(type) hook: \(error.localizedDescription, privacy: .public)")
+            }
+                
+        } catch {
+            TypeLogger.function().error("\(error.localizedDescription, privacy: .public)")
         }
     }
 }

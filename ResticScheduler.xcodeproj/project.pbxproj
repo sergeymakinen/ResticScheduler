@@ -38,7 +38,6 @@
 		4BFF99D52981BE3C00A5FA6B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99CA2981BE3C00A5FA6B /* AppDelegate.swift */; };
 		4BFF99D72981BE3C00A5FA6B /* EditableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99CC2981BE3C00A5FA6B /* EditableList.swift */; };
 		4BFF99D82981BE3C00A5FA6B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99CD2981BE3C00A5FA6B /* SettingsView.swift */; };
-		4BFF99DB2981C18C00A5FA6B /* ResticRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF99DA2981C18C00A5FA6B /* ResticRunner.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,7 +134,6 @@
 		4BFF99CA2981BE3C00A5FA6B /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4BFF99CC2981BE3C00A5FA6B /* EditableList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableList.swift; sourceTree = "<group>"; };
 		4BFF99CD2981BE3C00A5FA6B /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		4BFF99DA2981C18C00A5FA6B /* ResticRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResticRunner.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,7 +221,6 @@
 				4B99375F2D5F4B7B00EE0D2E /* HookEditor.swift */,
 				4BCFA52C2A505EFC00132BF6 /* Info.plist */,
 				4BFF997A2981868800A5FA6B /* Preview Content */,
-				4BFF99DA2981C18C00A5FA6B /* ResticRunner.swift */,
 				4BFF997D2981868800A5FA6B /* ResticScheduler.entitlements */,
 				4BDF2AFC2988653100B413CA /* ResticScheduler.swift */,
 				4BFF99742981868700A5FA6B /* ResticSchedulerApp.swift */,
@@ -501,7 +498,6 @@
 				4BFF99D32981BE3C00A5FA6B /* ResticSettingsView.swift in Sources */,
 				4B5531D82986E2B7003C9B5B /* AdvancedSettingsView.swift in Sources */,
 				4BDF2AFD2988653100B413CA /* ResticScheduler.swift in Sources */,
-				4BFF99DB2981C18C00A5FA6B /* ResticRunner.swift in Sources */,
 				4B9937602D5F4B7B00EE0D2E /* HookEditor.swift in Sources */,
 				4BFF99D42981BE3C00A5FA6B /* Utilities.swift in Sources */,
 				4BFF99D82981BE3C00A5FA6B /* SettingsView.swift in Sources */,
