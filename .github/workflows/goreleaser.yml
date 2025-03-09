@@ -10,7 +10,7 @@ jobs:
   GoReleaser:
     env:
       RESTIC_VERSION: '0.17.3'
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
