@@ -17,12 +17,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         case details = "DETAILS"
     }
 
+    private(set) static var shared: AppDelegate?
+
     private static let authorizationOptions: UNAuthorizationOptions = [.alert, .sound]
     private var notificationCenter: UNUserNotificationCenter?
 
     func applicationDidFinishLaunching(_: Notification) {
-        NSApp.setActivationPolicy(.accessory)
-
+        Self.shared = self
         notificationCenter = UNUserNotificationCenter.current()
         notificationCenter!.delegate = self
         let detailsAction = UNNotificationAction(identifier: NotificationActionIdentifier.details.rawValue, title: "Details", options: [])

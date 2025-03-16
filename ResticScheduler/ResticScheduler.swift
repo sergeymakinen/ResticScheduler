@@ -1,7 +1,7 @@
-import Cocoa
 import Combine
 import os
 import ResticSchedulerKit
+import SwiftUI
 import UserNotifications
 
 class ResticScheduler: ObservableObject, ResticSchedulerProtocol {
@@ -95,8 +95,6 @@ class ResticScheduler: ObservableObject, ResticSchedulerProtocol {
         return lastSuccessfulBackupDate == nil || abs(lastSuccessfulBackupDate!.timeIntervalSinceNow) >= TimeInterval(interval.components.seconds * 2)
     }
 
-    private var appDelegate: AppDelegate? { NSApp.delegate as? AppDelegate }
-
     init() {
         runner.scheduler = self
         rescheduleBackup()
@@ -163,7 +161,7 @@ class ResticScheduler: ObservableObject, ResticSchedulerProtocol {
                             content.body = "Restic Scheduler couldn’t complete the backup."
                             content.userInfo[AppDelegate.NotificationUserInfoKey.localizedError.rawValue] = error!.localizedDescription
                             content.categoryIdentifier = AppDelegate.NotificationCategoryIdentifier.backupFailure.rawValue
-                            self?.appDelegate?.addNotification(content: content)
+                            AppDelegate.shared?.addNotification(content: content)
                         } else {
                             self?.lastSuccessfulBackupDate = Date()
                         }
