@@ -1,6 +1,18 @@
 import Foundation
 
 @objc public class BackupOptions: NSObject, NSSecureCoding {
+    public enum CodingKeys: String, CodingKey {
+        case logURL
+        case summaryURL
+        case arguments
+        case includes
+        case excludes
+        case environment
+        case beforeBackup
+        case onSuccess
+        case onFailure
+    }
+
     public let logURL: URL
     public let summaryURL: URL
     public let arguments: [String]
@@ -26,27 +38,27 @@ import Foundation
     public static var supportsSecureCoding: Bool { true }
 
     public func encode(with coder: NSCoder) {
-        coder.encode(logURL, forKey: "logURL")
-        coder.encode(summaryURL, forKey: "summaryURL")
-        coder.encode(arguments, forKey: "arguments")
-        coder.encode(includes, forKey: "includes")
-        coder.encode(excludes, forKey: "excludes")
-        coder.encode(environment, forKey: "environment")
-        coder.encode(beforeBackup, forKey: "beforeBackup")
-        coder.encode(onSuccess, forKey: "onSuccess")
-        coder.encode(onFailure, forKey: "onFailure")
+        coder.encode(logURL, forKey: CodingKeys.logURL.rawValue)
+        coder.encode(summaryURL, forKey: CodingKeys.summaryURL.rawValue)
+        coder.encode(arguments, forKey: CodingKeys.arguments.rawValue)
+        coder.encode(includes, forKey: CodingKeys.includes.rawValue)
+        coder.encode(excludes, forKey: CodingKeys.excludes.rawValue)
+        coder.encode(environment, forKey: CodingKeys.environment.rawValue)
+        coder.encode(beforeBackup, forKey: CodingKeys.beforeBackup.rawValue)
+        coder.encode(onSuccess, forKey: CodingKeys.onSuccess.rawValue)
+        coder.encode(onFailure, forKey: CodingKeys.onFailure.rawValue)
     }
 
     public required init?(coder: NSCoder) {
-        logURL = coder.decodeObject(of: NSURL.self, forKey: "logURL")! as URL
-        summaryURL = coder.decodeObject(of: NSURL.self, forKey: "summaryURL")! as URL
-        arguments = coder.decodeArrayOfObjects(ofClass: NSString.self, forKey: "arguments")! as [String]
-        includes = coder.decodeArrayOfObjects(ofClass: NSString.self, forKey: "includes")! as [String]
-        excludes = coder.decodeArrayOfObjects(ofClass: NSString.self, forKey: "excludes")! as [String]
-        environment = coder.decodeDictionary(withKeyClass: NSString.self, objectClass: NSString.self, forKey: "environment")! as [String: String]
-        beforeBackup = coder.decodeObject(of: NSString.self, forKey: "beforeBackup")! as String
-        onSuccess = coder.decodeObject(of: NSString.self, forKey: "onSuccess")! as String
-        onFailure = coder.decodeObject(of: NSString.self, forKey: "onFailure")! as String
+        logURL = coder.decodeObject(of: NSURL.self, forKey: CodingKeys.logURL.rawValue)! as URL
+        summaryURL = coder.decodeObject(of: NSURL.self, forKey: CodingKeys.summaryURL.rawValue)! as URL
+        arguments = coder.decodeArrayOfObjects(ofClass: NSString.self, forKey: CodingKeys.arguments.rawValue)! as [String]
+        includes = coder.decodeArrayOfObjects(ofClass: NSString.self, forKey: CodingKeys.includes.rawValue)! as [String]
+        excludes = coder.decodeArrayOfObjects(ofClass: NSString.self, forKey: CodingKeys.excludes.rawValue)! as [String]
+        environment = coder.decodeDictionary(withKeyClass: NSString.self, objectClass: NSString.self, forKey: CodingKeys.environment.rawValue)! as [String: String]
+        beforeBackup = coder.decodeObject(of: NSString.self, forKey: CodingKeys.beforeBackup.rawValue) as? String
+        onSuccess = coder.decodeObject(of: NSString.self, forKey: CodingKeys.onSuccess.rawValue) as? String
+        onFailure = coder.decodeObject(of: NSString.self, forKey: CodingKeys.onFailure.rawValue) as? String
     }
 }
 

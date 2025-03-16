@@ -52,7 +52,7 @@ public func withCallingReplyOnce<Result, Error>(_ reply: @escaping (Result, Erro
             return
         }
 
-        Logger.function().warning("Ignored subsequent call at \(function)")
+        Logger.function().warning("Ignored subsequent call at \(function, privacy: .public)")
     }
 }
 
@@ -64,7 +64,7 @@ public func withCallingReplyOnce<Error>(_ reply: @escaping (Error) -> Void, func
             return
         }
 
-        Logger.function().warning("Ignored subsequent call at \(function)")
+        Logger.function().warning("Ignored subsequent call at \(function, privacy: .public)")
     }
 }
 
