@@ -31,15 +31,18 @@ extension UserDefaultValues {
 
     @UserDefaultEntry("LastSuccessfulBackupDate")
     var lastSuccessfulBackupDate: Date? = nil
-    
+
     @UserDefaultEntry("BeforeBackupHook")
     var beforeBackup: Hook? = nil
-    
+
     @UserDefaultEntry("OnSuccessHook")
     var onSuccess: Hook? = nil
-    
+
     @UserDefaultEntry("OnFailureHook")
     var onFailure: Hook? = nil
+
+    @UserDefaultEntry("LocalizedError")
+    var localizedError: String? = nil
 }
 
 extension KeychainPasswordValues {

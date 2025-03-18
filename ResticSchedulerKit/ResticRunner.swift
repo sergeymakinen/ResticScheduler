@@ -2,15 +2,7 @@ import Foundation
 
 @objc public class BackupOptions: NSObject, NSSecureCoding {
     public enum CodingKeys: String, CodingKey {
-        case logURL
-        case summaryURL
-        case arguments
-        case includes
-        case excludes
-        case environment
-        case beforeBackup
-        case onSuccess
-        case onFailure
+        case logURL, summaryURL, arguments, includes, excludes, environment, beforeBackup, onSuccess, onFailure
     }
 
     public let logURL: URL

@@ -43,3 +43,28 @@ extension Binding {
         }
     }
 }
+
+extension NSAlert {
+    enum MessageText: CustomStringConvertible {
+        case logNotFound(logURL: URL)
+        case backupFailure(repository: String)
+
+        var description: String {
+            switch self {
+            case let .logNotFound(logURL): "The log “\(logURL.path(percentEncoded: false))” could not be opened. The file doesn’t exist."
+            case let .backupFailure(repository): "Restic Scheduler couldn’t complete the backup to “\(formatRepository(repository))”"
+            }
+        }
+    }
+
+    static func showError(_ messageText: MessageText, informativeText: String = "") {
+        let alert = NSAlert()
+        alert.messageText = messageText.description
+        if !informativeText.isEmpty {
+            alert.informativeText = informativeText
+        }
+        alert.alertStyle = .critical
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+}

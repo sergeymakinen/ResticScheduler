@@ -11,6 +11,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
 
     enum NotificationUserInfoKey: String {
         case localizedError = "LOCALIZED_ERROR"
+        case repository = "REPOSITORY"
     }
 
     private enum NotificationActionIdentifier: String {
@@ -55,12 +56,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         DispatchQueue.main.async {
             switch notification.actionIdentifier {
             case NotificationActionIdentifier.details.rawValue, UNNotificationDefaultActionIdentifier:
-                let alert = NSAlert()
-                alert.messageText = "Restic Scheduler couldn’t complete the backup."
-                alert.informativeText = notification.notification.request.content.userInfo[NotificationUserInfoKey.localizedError.rawValue] as? String ?? ""
-                alert.alertStyle = .critical
-                alert.addButton(withTitle: "OK")
-                alert.runModal()
+                guard let repository = notification.notification.request.content.userInfo[NotificationUserInfoKey.repository.rawValue] as? String else {
+                    TypeLogger.function().warning("No repository name found in notification user info")
+                    return
+                }
+                guard let localizedError = notification.notification.request.content.userInfo[NotificationUserInfoKey.localizedError.rawValue] as? String else {
+                    TypeLogger.function().warning("No localized error found in notification user info")
+                    return
+                }
+
+                NSAlert.showError(.backupFailure(repository: repository), informativeText: localizedError)
             default:
                 break
             }

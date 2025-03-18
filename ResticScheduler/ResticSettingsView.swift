@@ -21,6 +21,7 @@ struct ResticSettingsView: View {
     @State private var browseRepository = false
     @EnvironmentObject private var resticScheduler: ResticScheduler
     @UserDefault(\.lastSuccessfulBackupDate) private var lastSuccessfulBackupDate
+    @UserDefault(\.localizedError) private var localizedError
     @UserDefault(\.repository) private var repository
     @KeychainPassword(\.password) private var password
     @UserDefault(\.includes) private var includes
@@ -135,6 +136,7 @@ struct ResticSettingsView: View {
         }
         .onChange(of: repository) { _ in
             lastSuccessfulBackupDate = nil
+            localizedError = nil
             resticScheduler.rescheduleStaleBackupCheck()
         }
         .onChange(of: [

@@ -9,31 +9,13 @@ import SwiftUI
     @StateObject private var resticScheduler = ResticScheduler()
     @UserDefault(\.repository) private var repository
     @UserDefault(\.lastSuccessfulBackupDate) private var lastSuccessfulBackupDate
-
-    private var destination: String {
-        var repositoryURL: URL?
-        switch true {
-        case repository.hasPrefix(RepositoryType.sftp.rawValue + "//"):
-            repositoryURL = URL(string: repository)
-        case repository.hasPrefix(RepositoryType.sftp.rawValue):
-            repositoryURL = URL(string: repository.inserting(contentsOf: "//", at: RepositoryType.sftp.rawValue.endIndex))
-        case repository.hasPrefix(RepositoryType.rest.rawValue):
-            return URL(string: repository.droppingPrefix(RepositoryType.rest.rawValue))!.host(percentEncoded: false)!
-        default:
-            return FileManager.default.displayName(atPath: repository)
-        }
-        if let host = repositoryURL?.host(percentEncoded: false) {
-            return host
-        }
-
-        return repository
-    }
+    @UserDefault(\.localizedError) private var localizedError
 
     private var actionLabel: String {
         switch resticScheduler.status {
-        case .stopping: "Stopping Backup…"
+        case .stopping: lastSuccessfulBackupDate == nil ? "Stopping…" : "Skipping…"
         case .idle: "Back Up Now"
-        default: "Stop This Backup"
+        default: lastSuccessfulBackupDate == nil ? "Stop This Backup" : "Skip This Backup"
         }
     }
 
@@ -49,13 +31,16 @@ import SwiftUI
         MenuBarExtra("Restic Scheduler", image: resticScheduler.status == .idle ? "custom.umbrella.fill" : "custom.umbrella.fill.badge.clock") {
             switch resticScheduler.status {
             case .preparation:
-                Text("Preparing Backup…")
+                Text("Preparing to back up…")
             case .backup:
                 Text("\(resticScheduler.percentDone.formatted(.percent)) done – \(resticScheduler.bytesDone.formatted(.byteCount(style: .file))) copied")
             default:
                 if lastSuccessfulBackupDate != nil {
-                    Text("Latest Backup to “\(destination)”:")
+                    Text("Latest Backup to “\(formatRepository(repository))”")
                     Text(lastSuccessfulBackup)
+                    if localizedError != nil {
+                        Button("Backup Failed…", action: showError)
+                    }
                 } else {
                     Text("Waiting to Complete First Backup")
                 }
@@ -104,14 +89,37 @@ import SwiftUI
 
     func showLogs() {
         guard let exists = try? resticScheduler.logURL.checkResourceIsReachable(), exists else {
-            let alert = NSAlert()
-            alert.messageText = "The log “\(resticScheduler.logURL.path(percentEncoded: false))” could not be opened. The file doesn’t exist."
-            alert.alertStyle = .critical
-            alert.addButton(withTitle: "OK")
-            alert.runModal()
+            NSAlert.showError(.logNotFound(logURL: resticScheduler.logURL))
             return
         }
 
         NSWorkspace.shared.open(resticScheduler.logURL)
     }
+
+    func showError() {
+        guard let localizedError else {
+            return
+        }
+
+        NSAlert.showError(.backupFailure(repository: repository), informativeText: localizedError)
+    }
+}
+
+func formatRepository(_ repository: String) -> String {
+    var repositoryURL: URL?
+    switch true {
+    case repository.hasPrefix(RepositoryType.sftp.rawValue + "//"):
+        repositoryURL = URL(string: repository)
+    case repository.hasPrefix(RepositoryType.sftp.rawValue):
+        repositoryURL = URL(string: repository.inserting(contentsOf: "//", at: RepositoryType.sftp.rawValue.endIndex))
+    case repository.hasPrefix(RepositoryType.rest.rawValue):
+        repositoryURL = URL(string: repository.droppingPrefix(RepositoryType.rest.rawValue))
+    default:
+        return FileManager.default.displayName(atPath: repository)
+    }
+    if let host = repositoryURL?.host(percentEncoded: false) {
+        return host
+    }
+
+    return repository
 }

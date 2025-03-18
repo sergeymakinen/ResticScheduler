@@ -79,6 +79,7 @@ class ResticScheduler: ObservableObject, ResticSchedulerProtocol {
     @UserDefault(\.beforeBackup) private var beforeBackup
     @UserDefault(\.onSuccess) private var onSuccess
     @UserDefault(\.onFailure) private var onFailure
+    @UserDefault(\.localizedError) private var localizedError
 
     private let runner = Runner()
     private let lock = OSAllocatedUnfairLock()
@@ -153,19 +154,30 @@ class ResticScheduler: ObservableObject, ResticSchedulerProtocol {
                 onFailure: onFailure?.hook
             )
             runner.backup(binary: binary, options: options) { [weak self] error in
-                self?.lock.withLock {
-                    DispatchQueue.main.sync {
-                        if error != nil {
+                guard let self else {
+                    return
+                }
+
+                lock.withLock {
+                    DispatchQueue.main.sync { [weak self] in
+                        guard let self else {
+                            return
+                        }
+
+                        if let error {
+                            localizedError = error.localizedDescription
                             let content = UNMutableNotificationContent()
                             content.title = "Backup Not Completed"
                             content.body = "Restic Scheduler couldn’t complete the backup."
-                            content.userInfo[AppDelegate.NotificationUserInfoKey.localizedError.rawValue] = error!.localizedDescription
+                            content.userInfo[AppDelegate.NotificationUserInfoKey.localizedError.rawValue] = localizedError
+                            content.userInfo[AppDelegate.NotificationUserInfoKey.repository.rawValue] = repository
                             content.categoryIdentifier = AppDelegate.NotificationCategoryIdentifier.backupFailure.rawValue
                             AppDelegate.shared?.addNotification(content: content)
                         } else {
-                            self?.lastSuccessfulBackupDate = Date()
+                            localizedError = nil
+                            lastSuccessfulBackupDate = Date()
                         }
-                        self?.status = .idle
+                        status = .idle
                         completion(error)
                     }
                 }
