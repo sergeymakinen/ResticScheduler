@@ -10,7 +10,7 @@ jobs:
   GoReleaser:
     env:
       RESTIC_VERSION: '0.17.3'
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -26,6 +26,9 @@ jobs:
           curl -sL 'https://github.com/restic/restic/releases/download/v${{ env.RESTIC_VERSION }}/restic_${{ env.RESTIC_VERSION }}_darwin_arm64.bz2' | bunzip2 >restic_arm64
           lipo -create -output restic restic_amd64 restic_arm64
           chmod +x restic
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
       - name: Build
         run: |
           make disable-code-signing VERSION=$(echo '${{ github.ref_name }}' | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+).*/\1.\2.\3/')
