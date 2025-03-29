@@ -12,15 +12,16 @@ Native macOS menu bar app heavily inspired by Apple's Time Machine to perform sc
 * SFTP, REST, S3 (+ compatible) or local repository types
 * List of included/excluded files/folders
 * Custom command-line arguments
+* Backup success/failure hooks
 
 ## Screenshots
 
 <p align="center">
-  <img alt="Backing Up" src="https://github.com/sergeymakinen/ResticScheduler/assets/983964/2c0da061-5a70-4cf6-a0a3-2b3d7f84e247">
-  <img alt="Status" src="https://github.com/sergeymakinen/ResticScheduler/assets/983964/d1fac75f-a9f3-4e73-93cd-2f0392cc2f1e">
-  <img width="624" alt="General" src="https://github.com/sergeymakinen/ResticScheduler/assets/983964/4edae23f-dedc-4e2d-b4ef-dedc4ce73585">
-  <img width="624" alt="Restic" src="https://github.com/sergeymakinen/ResticScheduler/assets/983964/530433d7-9734-4738-b463-abc4915fc3c9">
-  <img width="624" alt="Advanced" src="https://github.com/sergeymakinen/ResticScheduler/assets/983964/0fa108ac-d9cf-4383-8992-97b5bd952db5">
+  <img alt="Backing Up" src="https://github.com/user-attachments/assets/acde0a7e-551b-49d1-8173-6a24ad7e4e4c">
+  <img alt="Status" src="https://github.com/user-attachments/assets/19d1a2b8-a40d-43a4-80b3-07c95e808c37">
+  <img width="624" alt="General" src="https://github.com/user-attachments/assets/527ddf84-f83e-4c4d-80e6-4f532defc364">
+  <img width="624" alt="Restic" src="https://github.com/user-attachments/assets/c310068f-39c8-4350-990c-f5a9533de7e7">
+  <img width="624" alt="Advanced" src="https://github.com/user-attachments/assets/de57a69c-c609-4106-be14-39429bc0716d">
 </p>
 
 ## Installation
