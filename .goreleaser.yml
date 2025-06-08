@@ -5,3 +5,5 @@ builds:
 
 release:
   prerelease: auto
+  extra_files:
+    - glob: Build/Products/Release/*.zip
