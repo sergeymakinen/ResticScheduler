@@ -57,6 +57,7 @@ import Foundation
 public enum ProcessError: CustomNSError, LocalizedError, _ObjectiveCBridgeableError {
     public enum Code: Int {
         case abnormalTermination = 1
+        case missingRestic = 2
     }
 
     public enum UserInfoKey: String {
@@ -65,12 +66,14 @@ public enum ProcessError: CustomNSError, LocalizedError, _ObjectiveCBridgeableEr
     }
 
     case abnormalTermination(terminationStatus: Int32, standardError: String)
+    case missingRestic
 
     public static let errorDomain = String(describing: Self.self)
 
     public var errorCode: Int {
         switch self {
         case .abnormalTermination: Code.abnormalTermination.rawValue
+        case .missingRestic: Code.missingRestic.rawValue
         }
     }
 
@@ -82,12 +85,15 @@ public enum ProcessError: CustomNSError, LocalizedError, _ObjectiveCBridgeableEr
                 UserInfoKey.terminationStatus.rawValue: terminationStatus,
                 UserInfoKey.standardError.rawValue: standardError,
             ]
+        default:
+            [NSLocalizedDescriptionKey: errorDescription!]
         }
     }
 
     public var errorDescription: String? {
         switch self {
         case let .abnormalTermination(terminationStatus, standardError): "Process exited with code \(terminationStatus): \(standardError != "" ? standardError : "<no output>")"
+        case .missingRestic: "Unavailable built-in restic and no custom was provided"
         }
     }
 
@@ -102,6 +108,8 @@ public enum ProcessError: CustomNSError, LocalizedError, _ObjectiveCBridgeableEr
                 terminationStatus: error.userInfo[UserInfoKey.terminationStatus.rawValue] as! Int32,
                 standardError: error.userInfo[UserInfoKey.standardError.rawValue] as! String
             )
+        case Code.missingRestic.rawValue:
+            self = .missingRestic
         default:
             return nil
         }
@@ -157,4 +165,5 @@ public enum BackupError: CustomNSError, LocalizedError, _ObjectiveCBridgeableErr
     func version(binary: String?, reply: @escaping (String?, Error?) -> Void)
     func backup(binary: String?, options: BackupOptions, reply: @escaping (Error?) -> Void)
     func stop(reply: @escaping (Error?) -> Void)
+    func includesBuiltIn(reply: @escaping (Bool) -> Void)
 }

@@ -57,7 +57,12 @@ class ResticRunnerService: ResticRunnerProtocol {
     func version(binary: String?, reply: @escaping (String?, Error?) -> Void) {
         let process = Process()
         process.qualityOfService = .userInitiated
-        process.executableURL = resticURL(forBinary: binary)
+        guard let executableURL = resticURL(forBinary: binary) else {
+            reply(nil, ProcessError.missingRestic)
+            return
+        }
+
+        process.executableURL = executableURL
         process.arguments = ["version"]
         let standardOutput = Pipe()
         let standardError = Pipe()
@@ -103,7 +108,12 @@ class ResticRunnerService: ResticRunnerProtocol {
         }
         let process = Process()
         process.qualityOfService = .background
-        process.executableURL = resticURL(forBinary: binary)
+        guard let executableURL = resticURL(forBinary: binary) else {
+            reply(ProcessError.missingRestic)
+            return
+        }
+
+        process.executableURL = executableURL
         process.environment = ProcessInfo.processInfo.environment
             .merging(options.environment) { _, new in new }
             .merging(["RESTIC_PROGRESS_FPS": "0.2"]) { _, new in new }
@@ -237,6 +247,10 @@ class ResticRunnerService: ResticRunnerProtocol {
         }
     }
 
+    func includesBuiltIn(reply: @escaping (Bool) -> Void) {
+        reply(resticURL(forBinary: nil) != nil)
+    }
+
     private func runHook(_ hook: String, ofType type: HookType, loggingTo logURL: URL) {
         do {
             try "\(Self.logPadding)Invoking \(type) hook...\n".append(to: logURL, encoding: .utf8)
@@ -278,16 +292,15 @@ class ResticRunnerService: ResticRunnerProtocol {
                 let error = ProcessError.abnormalTermination(terminationStatus: process.terminationStatus, standardError: standardErrorOutput.trimmingCharacters(in: .whitespacesAndNewlines))
                 TypeLogger.function().error("Failed to run \(type) hook: \(error.localizedDescription, privacy: .public)")
             }
-
         } catch {
             TypeLogger.function().error("\(error.localizedDescription, privacy: .public)")
         }
     }
 }
 
-func resticURL(forBinary binary: String?) -> URL {
+func resticURL(forBinary binary: String?) -> URL? {
     guard let binary, !binary.isEmpty else {
-        return Bundle.main.url(forResource: "restic", withExtension: "")!
+        return Bundle.main.url(forResource: "restic", withExtension: "")
     }
 
     return URL(fileURLWithPath: binary)

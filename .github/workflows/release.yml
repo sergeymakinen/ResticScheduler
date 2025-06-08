@@ -5,9 +5,10 @@ on:
       - '*'
 permissions:
   contents: write
-name: goreleaser
+name: Release
 jobs:
-  GoReleaser:
+  goreleaser:
+    name: GoReleaser
     env:
       RESTIC_VERSION: '0.17.3'
     runs-on: macos-14
@@ -36,6 +37,7 @@ jobs:
       - name: Pack application
         run: |
           (cd Build/Products/Release && zip -9 -r 'Restic Scheduler ${{ github.ref_name }}.zip' 'Restic Scheduler.app')
+          (cd Build/Products/Release && rm 'Restic Scheduler.app/Contents/XPCServices/Restic Runner.xpc/Contents/Resources/restic' && zip -9 -r 'Restic Scheduler ${{ github.ref_name }} (without restic).zip' 'Restic Scheduler.app')
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
@@ -45,8 +47,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifacts
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@c95fe1489396fe8a9eb87c0abf8aa5b2ef267fda # v2.2.1
         with:
-          files: 'Build/Products/Release/Restic Scheduler ${{ github.ref_name }}.zip'
+          files: Build/Products/Release/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

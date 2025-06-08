@@ -46,6 +46,7 @@ struct AdvancedSettingsView: View {
     }
 
     @State private var browseBinary = false
+    @State private var includesBuiltIn: Bool?
     @StateObject private var binaryVersion = BinaryVersion()
     @EnvironmentObject private var resticScheduler: ResticScheduler
     @UserDefault(\.binary) private var binary
@@ -87,8 +88,10 @@ struct AdvancedSettingsView: View {
                             .tag(BinaryType.manual)
                             Divider()
                         }
-                        Text("Built-in")
-                            .tag(BinaryType.builtIn)
+                        if includesBuiltIn != false {
+                            Text("Built-in")
+                                .tag(BinaryType.builtIn)
+                        }
                         Text("Other…")
                             .tag(BinaryType.browse)
                     }
@@ -158,7 +161,16 @@ struct AdvancedSettingsView: View {
             arguments,
         ] as [AnyHashable]) { _ in resticScheduler.rescheduleStaleBackupCheck() }
         .onChange(of: binary) { _ in binaryVersion.scheduleUpdate(via: resticScheduler, for: binary) }
-        .onAppear { binaryVersion.scheduleUpdate(via: resticScheduler, for: binary) }
+        .onAppear {
+            if includesBuiltIn == nil {
+                resticScheduler.includesBuiltIn { result in
+                    DispatchQueue.main.async {
+                        includesBuiltIn = result
+                    }
+                }
+            }
+            binaryVersion.scheduleUpdate(via: resticScheduler, for: binary)
+        }
     }
 }
 

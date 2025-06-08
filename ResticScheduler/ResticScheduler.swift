@@ -29,6 +29,11 @@ class ResticScheduler: ObservableObject, ResticSchedulerProtocol {
             activateRemoteObjectProxyWithErrorHandler { error in replyOnce(error) }?.stop(reply: replyOnce)
         }
 
+        func includesBuiltIn(reply: @escaping (Bool) -> Void) {
+            let replyOnce = withCallingReplyOnce(reply)
+            activateRemoteObjectProxyWithErrorHandler { _ in replyOnce(true) }?.includesBuiltIn(reply: replyOnce)
+        }
+
         private func activateRemoteObjectProxyWithErrorHandler(_ handler: @escaping (XPCConnectionError) -> Void) -> ResticRunnerProtocol? {
             NSXPCConnection(serviceName: Self.serviceName).activateRemoteObjectProxyWithErrorHandler(protocol: ResticRunnerProtocol.self) { error in handler(error) }
         }
@@ -214,6 +219,10 @@ class ResticScheduler: ObservableObject, ResticSchedulerProtocol {
 
     func version(completion: @escaping (String?, Error?) -> Void) {
         runner.version(binary: binary, reply: completion)
+    }
+
+    func includesBuiltIn(completion: @escaping (Bool) -> Void) {
+        runner.includesBuiltIn(reply: completion)
     }
 
     func rescheduleBackup() {
