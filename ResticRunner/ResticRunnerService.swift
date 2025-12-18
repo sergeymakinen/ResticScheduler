@@ -121,7 +121,7 @@ class ResticRunnerService: ResticRunnerProtocol {
             try FileManager.default.createDirectory(at: options.logURL.deletingLastPathComponent(), withIntermediateDirectories: true)
             try "\(Date().formatted(.rfc3164)) Starting backup...\n".append(to: options.logURL, encoding: .utf8)
             if let beforeBackup = options.beforeBackup {
-                runHook(beforeBackup, ofType: .beforeBackup, loggingTo: options.logURL)
+                runHook(beforeBackup, ofType: .beforeBackup, loggingTo: options.logURL, env: process.environment)
             }
             let cacheURL = try FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
                 .appending(path: Bundle.main.bundleIdentifier!, directoryHint: .isDirectory)
@@ -206,7 +206,7 @@ class ResticRunnerService: ResticRunnerProtocol {
                     }
                 }
                 if let onSuccess = options.onSuccess {
-                    runHook(onSuccess, ofType: .onSuccess, loggingTo: options.logURL)
+                    runHook(onSuccess, ofType: .onSuccess, loggingTo: options.logURL, env: process.environment)
                 }
                 do {
                     try "\n".append(to: options.logURL, encoding: .utf8)
@@ -218,7 +218,7 @@ class ResticRunnerService: ResticRunnerProtocol {
                 let error = ProcessError.abnormalTermination(terminationStatus: process.terminationStatus, standardError: standardErrorOutput.trimmingCharacters(in: .whitespacesAndNewlines))
                 TypeLogger.function().error("\(error.localizedDescription, privacy: .public)")
                 if let onFailure = options.onFailure {
-                    runHook(onFailure, ofType: .onFailure, loggingTo: options.logURL)
+                    runHook(onFailure, ofType: .onFailure, loggingTo: options.logURL, env: process.environment)
                 }
                 do {
                     try "\n".append(to: options.logURL, encoding: .utf8)
@@ -251,7 +251,7 @@ class ResticRunnerService: ResticRunnerProtocol {
         reply(resticURL(forBinary: nil) != nil)
     }
 
-    private func runHook(_ hook: String, ofType type: HookType, loggingTo logURL: URL) {
+    private func runHook(_ hook: String, ofType type: HookType, loggingTo logURL: URL, env: [String:String]?) {
         do {
             try "\(Self.logPadding)Invoking \(type) hook...\n".append(to: logURL, encoding: .utf8)
         } catch {
@@ -261,7 +261,7 @@ class ResticRunnerService: ResticRunnerProtocol {
         process.qualityOfService = .background
         process.executableURL = URL(fileURLWithPath: hook)
         process.arguments = [type.rawValue]
-        process.environment = ProcessInfo.processInfo.environment
+        process.environment = env
         process.standardOutput = nil
         let standardError = Pipe()
         var standardErrorOutput = ""
